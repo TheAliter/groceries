@@ -1,3 +1,5 @@
+@import url("./variables.css");
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -11,25 +13,30 @@ h1 {
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
   padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: none;
   font-size: 1rem;
   font-weight: 500;
   font-family: inherit;
-  background-color: #00c230;
+  background-color: var(--btn-color);
+  color: white;
+  letter-spacing: 1px;
   cursor: pointer;
   transition: all 0.25s;
 }
 button:hover {
-  border-color: #00af0f;
+  background-color: var(--btn-color-hover);
+}
+button.caps {
+  text-transform: uppercase;
 }
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--accent-color);
   text-decoration: none;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--accent-color-dark);
 }
