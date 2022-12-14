@@ -1,0 +1,25 @@
+.container {
+  position: relative;
+  top: -10vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  max-width: 250px;
+  margin-inline: auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+.error {
+  font-size: 0.8rem;
+  color: red;
+}
+
+.back {
+  margin-top: var(--margin-xl2);
+}

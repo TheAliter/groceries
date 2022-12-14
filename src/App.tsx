@@ -1,23 +1,41 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { GlobalProvider } from "./contexts/GlobalContext";
 
 import "./assets/styles/App.css";
 
 import Welcome from "./pages/Welcome";
 import ShoppingList from "./pages/ShoppingList";
-
-// TODO: handle manual navigation to wrong shopping list 
+import JoinForm from "./pages/JoinForm";
+import { ShoppingListProvider } from "./contexts/ShoppingListContext";
+import Products from "./components/shoppingList/Products";
+import AddProduct from "./pages/AddProduct";
+import EditProduct from "./pages/EditProduct";
 
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Welcome />}></Route>
-          <Route path="/shopping-list/:id" element={<ShoppingList />}></Route>
-          <Route path="*" element={<Navigate to="/" />}></Route>
-        </Routes>
-      </BrowserRouter>
+      <GlobalProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Welcome />}></Route>
+            <Route path="/join-shopping-list" element={<JoinForm />}></Route>
+            <Route
+              path="/shopping-list/:accessKey/*"
+              element={
+                <ShoppingListProvider>
+                  <ShoppingList />
+                </ShoppingListProvider>
+              }
+            >
+              <Route path="" element={<Products />}></Route>
+              <Route path="add-product" element={<AddProduct />}></Route>
+              <Route path="edit-product/:id" element={<EditProduct />}></Route>
+            </Route>
+            <Route path="*" element={<Navigate to="/" />}></Route>
+          </Routes>
+        </BrowserRouter>
+      </GlobalProvider>
     </div>
   );
 }

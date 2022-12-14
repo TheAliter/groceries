@@ -5,4 +5,17 @@
   --accent-color-dark: #7a4bb1;
   --btn-color: #8cc051;
   --btn-color-hover: #64a41c;
+
+  --margin-xs: 0.25rem;
+  --margin-s: 0.5rem;
+  --margin-m: 0.75rem;
+  --margin-l: 1rem;
+  --margin-xl: 1.25rem;
+  --margin-xl2: 2rem;
+
+  --padding-xs: 0.25rem;
+  --padding-s: 0.5rem;
+  --padding-m: 0.75rem;
+  --padding-l: 1rem;
+  --padding-xl: 1.25rem;
 }

@@ -2,9 +2,14 @@
 
 #root {
   max-width: 1280px;
+  height: calc(100vh - 4rem);
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+}
+
+.App {
+  height: 100%;
 }
 
 h1 {
@@ -31,6 +36,9 @@ button:hover {
 button.caps {
   text-transform: uppercase;
 }
+button.accent {
+  background-color: var(--accent-color);
+}
 
 a {
   font-weight: 500;
@@ -40,3 +48,11 @@ a {
 a:hover {
   color: var(--accent-color-dark);
 }
+
+input {
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  border: 1px solid lightgrey;
+}
+
+

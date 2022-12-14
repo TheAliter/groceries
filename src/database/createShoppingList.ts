@@ -1,20 +1,21 @@
-import { useEffect } from "react";
 import { supabase } from "./initialize";
 
-async function createNewShoppingList() {
+async function dbCreateShoppingList() {
   const id = Math.floor(Math.random() * 10000000000);
+  let isSuccess = true;
   const { data, error } = await supabase
     .from("Shopping Lists")
     .insert([{ access_key: Math.floor(Math.random() * 10000000000) }]);
 
   if (error) {
     console.log(error);
+    isSuccess = false;
   }
 
   return {
     id,
-    error,
+    isSuccess,
   };
 }
 
-export default createNewShoppingList;
+export { dbCreateShoppingList as createShoppingList };

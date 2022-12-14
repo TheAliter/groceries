@@ -1,3 +1,27 @@
 .container {
-    /* align-items: start; */
+  height: 100%;
+}
+
+.container header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.menu-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: var(--primary-color-light);
+  text-align: center;
+  color: white;
+  cursor: pointer;
 }

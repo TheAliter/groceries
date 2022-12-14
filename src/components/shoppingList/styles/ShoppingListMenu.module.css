@@ -1,0 +1,15 @@
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-l);
+  margin: auto;
+  padding: var(--padding-xl);
+  max-width: 280px;
+  border-radius: 1rem;
+  background-color: white;
+}
+
+.container button:last-child {
+  margin-top: var(--margin-xl);
+}
