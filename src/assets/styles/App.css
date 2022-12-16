@@ -56,6 +56,7 @@ input {
   padding: 0.6rem 1.2rem;
   border-radius: 0.5rem;
   border: 1px solid lightgrey;
+  font-size: 1rem;
 }
 
 .error-text {

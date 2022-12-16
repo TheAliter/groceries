@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { dbDeleteShoppingList } from "../../database/deleteShoppingList";
+import { useScreenSizeType } from "../../hooks/useScreenSizeType";
 import { useShoppingListContext } from "../../hooks/useShoppingListContext";
 import ConfirmationModal from "../ConfirmationModal";
 import Modal from "../Modal";
@@ -18,9 +19,10 @@ export default function ShoppingListMenu({ handleCloseMenu }: Props) {
   const [confirmationModalTitle, setConfirmationModalTitle] = useState("");
   const shopListContext = useShoppingListContext();
   const navigate = useNavigate();
+  const screenType = useScreenSizeType();
 
-  function handleShowShopListCode() {
-    setShowShopListCode(true);
+  function handleShowShopListCode(newState: boolean) {
+    setShowShopListCode(newState);
   }
 
   function handleCopy() {
@@ -41,48 +43,62 @@ export default function ShoppingListMenu({ handleCloseMenu }: Props) {
   function handleExitShopList() {
     shopListContext?.shoppingListListener?.unsubscribe;
     shopListContext?.resetData();
+    localStorage.setItem("access_key", "");
     if (confirmationModalTitle.includes("izdzēst")) {
       dbDeleteShoppingList(shopListContext!.id);
     }
     navigate("/");
   }
 
+  const menuBlock = (
+    <div className={styles["menu-container"]}>
+      <button onClick={() => handleShowShopListCode(true)}>
+        Parādīt saraksta kodu
+      </button>
+      <button onClick={handleLeave}>Iziet no saraksta</button>
+      <button onClick={handleShowDeleteConfirmation} className="accent">
+        Izdzēst sarakstu
+      </button>
+      <button onClick={handleCloseMenu} className={styles["close-menu"]}>
+        Aizvērt
+      </button>
+    </div>
+  );
+
   return (
     <>
-      {!showDeleteOrLeaveConfirmation ? (
-        <Modal handleBackgroundClick={handleCloseMenu}>
-          {!showShopListCode ? (
-            <div className={styles["menu-container"]}>
-              <button onClick={handleShowShopListCode}>
-                Parādīt saraksta kodu
-              </button>
-              <button onClick={handleLeave}>Iziet no saraksta</button>
-              <button onClick={handleShowDeleteConfirmation} className="accent">
-                Izdzēst sarakstu
-              </button>
-              <button onClick={handleCloseMenu}>Aizvērt</button>
+      {screenType === "Desktop" ? (
+        menuBlock
+      ) : !showShopListCode && !showDeleteOrLeaveConfirmation ? (
+        <Modal handleBackgroundClick={handleCloseMenu}>{menuBlock}</Modal>
+      ) : null}
+
+      {showShopListCode && (
+        <Modal handleBackgroundClick={() => handleShowShopListCode(false)}>
+          <div className={styles["code-container"]}>
+            <p>Iepirkuma saraksta kods:</p>
+            <div className={styles["input-container"]}>
+              <input
+                type="text"
+                readOnly
+                value={shopListContext?.accessKey}
+              ></input>
+              {codeCopied && <span className="material-icons">check</span>}
             </div>
-          ) : (
-            <div className={styles["code-container"]}>
-              <p>Iepirkuma saraksta kods:</p>
-              <div className={styles["input-container"]}>
-                <input
-                  type="text"
-                  readOnly
-                  value={shopListContext?.accessKey}
-                ></input>
-                {codeCopied && <span className="material-icons">check</span>}
-              </div>
-              <div className={styles.actions}>
-                <button onClick={handleCloseMenu} className="accent">
-                  Aizvērt
-                </button>
-                <button onClick={handleCopy}>Nokopēt</button>
-              </div>
+            <div className={styles.actions}>
+              <button
+                onClick={() => handleShowShopListCode(false)}
+                className="accent"
+              >
+                Aizvērt
+              </button>
+              <button onClick={handleCopy}>Nokopēt</button>
             </div>
-          )}
+          </div>
         </Modal>
-      ) : (
+      )}
+
+      {showDeleteOrLeaveConfirmation && (
         <ConfirmationModal
           text={confirmationModalTitle}
           handleBgClick={() => setShowDeleteOrLeaveConfirmation(false)}

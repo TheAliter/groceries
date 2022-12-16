@@ -1,10 +1,3 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-}
-
 .products {
   flex-grow: 1;
   width: 100%;
@@ -12,6 +5,14 @@
   flex-direction: column;
   padding: 0;
   list-style-type: none;
+  flex-grow: 1;
+}
+
+.empty-list {
+  margin-block: var(--margin-xl2);
+  color: rgba(0, 0, 0, 0.2);
+  font-style: italic;
+  font-size: 1.1rem;
 }
 
 .product {
@@ -33,6 +34,18 @@
 }
 
 .main-action-btn {
-  width: 280px;
-  margin-bottom: var(--margin-xl2);
+  width: 100%;
+}
+
+@media (min-width: 960px) {
+  .empty-list {
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .main-action-btn {
+    max-width: 300px;
+  }
 }

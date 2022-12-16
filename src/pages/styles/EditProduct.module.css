@@ -1,29 +1,36 @@
-.container {
+.form {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  height: 100%;
-}
-
-.container form {
-  display: flex;
-  flex-direction: column;
+  align-self: center;
   flex-grow: 1;
   gap: var(--padding-m);
-  width: 280px;
-  margin-top: var(--margin-xl);
+  width: 100%;
+  max-width: 450px;
 }
 
-.container form label {
+.form label {
   display: flex;
   flex-direction: column;
 }
 
-.container form span {
+.form span {
   text-align: left;
 }
 
-.container > button {
-  width: 280px;
-  margin-bottom: var(--margin-xl2);
+.action-button {
+  width: 100%;
+  max-width: 450px;
+}
+
+@media (min-width: 960px) {
+  .form {
+    gap: var(--padding-l);
+  }
+
+  .form button {
+    margin-top: var(--margin-m);
+  }
+  .action-button {
+    max-width: 300px;
+  }
 }

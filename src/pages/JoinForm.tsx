@@ -1,5 +1,5 @@
 import { dbIsValidShoppingList } from "../database/isValidShoppingList";
-import { FormEvent,  useState } from "react";
+import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import styles from "./styles/JoinForm.module.css";
@@ -21,6 +21,7 @@ export default function JoinForm() {
 
     if (isValid) {
       navigate("/shopping-list/" + accessKey);
+      localStorage.setItem("access_key", accessKey);
     } else {
       setIsLoading(false);
       setErrorMessage("Nepareizs piekļuves kods");

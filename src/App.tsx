@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { GlobalProvider } from "./contexts/GlobalContext";
 
 import "./assets/styles/App.css";
+import "./assets/styles/layouts.css";
 
 import Welcome from "./pages/Welcome";
 import ShoppingList from "./pages/ShoppingList";
@@ -13,8 +14,7 @@ import AddProduct from "./pages/AddProduct";
 import EditProduct from "./pages/EditProduct";
 
 function App() {
-
-  // TODO: update UI for PC
+  // TODO improve PC UI
 
   return (
     <div className="App">

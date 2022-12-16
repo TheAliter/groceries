@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: var(--margin-l);
+}
+
+.container h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.menu-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: var(--primary-color-light);
+  text-align: center;
+  color: white;
+  cursor: pointer;
+}
+
+@media (min-width: 960px) {
+  .container {
+    margin-bottom: var(--margin-xl);
+  }
+
+  .menu-icon {
+    display: none;
+  }
+}

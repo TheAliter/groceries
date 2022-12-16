@@ -2,7 +2,6 @@ import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import styles from "./styles/ShoppingList.module.css";
 import { GlobalContext } from "../contexts/GlobalContext";
-import ShoppingListMenu from "../components/shoppingList/ShoppingListMenu";
 import { useShoppingListContext } from "../hooks/useShoppingListContext";
 import { dbGetShoppingListData } from "../database/getShoppingListData";
 import {
@@ -19,11 +18,6 @@ export default function ShoppingList() {
   const shopListContext = useShoppingListContext();
   const { accessKey } = useParams();
   const [isLoading, setIsLoading] = useState(true);
-  const [showMenu, setShowMenu] = useState(false);
-
-  function closeMenu(newState: boolean) {
-    setShowMenu(newState);
-  }
 
   function loadAndSetAllShoppingListData() {
     // Loading and setting all data regarding shopping list
@@ -70,17 +64,7 @@ export default function ShoppingList() {
 
   return (
     <div className={styles.container}>
-      <header>
-        <h1>Iepirkuma saraksts</h1>
-        <div onClick={() => closeMenu(true)} className={styles["menu-icon"]}>
-          <span className="material-icons">menu</span>
-        </div>
-      </header>
       {isLoading ? <Loader /> : <Outlet />}
-
-      {showMenu && (
-        <ShoppingListMenu handleCloseMenu={() => closeMenu(false)} />
-      )}
     </div>
   );
 }

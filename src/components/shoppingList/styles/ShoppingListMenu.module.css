@@ -48,6 +48,19 @@
   width: 10rem;
 }
 
-.menu-container button, .actions button {
+.menu-container button,
+.actions button {
   cursor: pointer;
+}
+
+@media (min-width: 960px) {
+  .menu-container {
+    padding: 0;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .close-menu {
+    display: none;
+  }
 }
