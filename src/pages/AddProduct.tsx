@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
+import { ShoppingListLayout } from "../components/Layouts";
 import Header from "../components/shoppingList/Header";
 import ShoppingListMenu from "../components/shoppingList/ShoppingListMenu";
 import { dbCreateProduct } from "../database/createProduct";
@@ -43,41 +44,45 @@ export default function AddProduct() {
     navigate(-1);
   }
 
-  return (
-    <div className="shopping-list-base">
-      <div className="left">
-        <Header handleMenuShow={() => setShowMenu(true)} />
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <label>
-            <span>Nosaukums</span>
-            <input ref={nameField} required></input>
-          </label>
-          <label>
-            <span>Daudzums</span>
-            <input ref={amountField}></input>
-          </label>
-          <label>
-            <span>Mērvienība</span>
-            <input ref={unitsField}></input>
-          </label>
-          <button>Apstiprināt</button>
-        </form>
-      </div>
+  const mainContentBlock = (
+    <>
+      <Header handleMenuShow={() => setShowMenu(true)} />
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <label>
+          <span>Nosaukums</span>
+          <input ref={nameField} required></input>
+        </label>
+        <label>
+          <span>Daudzums</span>
+          <input ref={amountField}></input>
+        </label>
+        <label>
+          <span>Mērvienība</span>
+          <input ref={unitsField}></input>
+        </label>
+        <button>Apstiprināt</button>
+      </form>
+    </>
+  );
 
-      <div className="right">
-        <div className="actions">
-          <button
-            onClick={() => navigate(-1)}
-            className={styles["action-button"]}
-          >
-            Atcelt
-          </button>
-        </div>
-        <div className="spacer"></div>
-        {(screenType === "Desktop" || showMenu) && (
-          <ShoppingListMenu handleCloseMenu={() => setShowMenu(false)} />
-        )}
-      </div>
-    </div>
+  const actionsBlock = (
+    <button onClick={() => navigate(-1)} className={styles["action-button"]}>
+      Atcelt
+    </button>
+  );
+
+  const menuBlock =
+    screenType === "Desktop" || showMenu ? (
+      <ShoppingListMenu handleCloseMenu={() => setShowMenu(false)} />
+    ) : (
+      <></>
+    );
+
+  return (
+    <ShoppingListLayout
+      mainContent={mainContentBlock}
+      actions={actionsBlock}
+      menu={menuBlock}
+    />
   );
 }

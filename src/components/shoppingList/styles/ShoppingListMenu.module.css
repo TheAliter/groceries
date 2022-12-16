@@ -58,6 +58,7 @@
     padding: 0;
     width: 100%;
     max-width: 300px;
+    margin-block: auto;
   }
 
   .close-menu {
