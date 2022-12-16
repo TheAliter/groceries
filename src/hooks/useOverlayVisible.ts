@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useRef, ReactElement } from "react";
+import { useState, useEffect, useRef } from "react";
 
-export default function useComponentVisible<T extends HTMLElement>(
-  isVisible: boolean
-) {
-  const [isComponentVisible, setIsComponentVisible] = useState(isVisible);
+export function useOverlayVisible<T extends HTMLElement>(isVisible: boolean) {
+  const [isOverlayVisible, setIsOverlayVisible] = useState(isVisible);
   const ref = useRef<T>(null);
 
   const handleClickOutside = (event: MouseEvent) => {
     if (ref.current && !ref.current.contains(event.target as HTMLElement)) {
-      setIsComponentVisible(false);
+      setIsOverlayVisible(false);
     }
   };
 
@@ -19,5 +17,5 @@ export default function useComponentVisible<T extends HTMLElement>(
     };
   }, []);
 
-  return { ref, isComponentVisible, setIsComponentVisible };
+  return { ref, isOverlayVisible, setIsOverlayVisible };
 }

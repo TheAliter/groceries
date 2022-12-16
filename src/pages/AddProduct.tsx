@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import dbCreateProduct from "../database/createProduct";
+import { dbCreateProduct } from "../database/createProduct";
+import { dbUpdateShoppingListLastProductUid } from "../database/updateShoppingListLastProductUid";
 import { useShoppingListContext } from "../hooks/useShoppingListContext";
 import Product from "../types/Product";
 import styles from "./styles/AddProduct.module.css";
@@ -16,14 +17,24 @@ export default function AddProduct() {
   function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
 
-    const id = (shopListContext?.products.length ?? 100) + 1;
-    const name = nameField.current?.value ?? "";
-    const amount = parseInt(amountField.current?.value ?? "0");
-    const units = unitsField.current?.value ?? "";
+    const uid = parseInt(
+      `${shopListContext!.id}000${shopListContext!.lastProductUid}`
+    );
+    const name = nameField.current!.value;
+    const amount =
+      amountField.current?.value === ""
+        ? 0
+        : parseInt(amountField.current!.value);
+    const units = unitsField.current!.value;
 
-    const product = new Product(id, name, amount, units, shopListContext?.id);
+    const product = new Product(uid, name, amount, units, shopListContext!.id);
     shopListContext?.addProduct(product);
+    shopListContext?.setLastProductUid(shopListContext.lastProductUid + 1);
     dbCreateProduct(product);
+    dbUpdateShoppingListLastProductUid(
+      shopListContext!.id,
+      shopListContext!.lastProductUid
+    );
     navigate(-1);
   }
 

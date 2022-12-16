@@ -14,14 +14,15 @@ export default function Products() {
   return (
     <div className={styles.container}>
       <ul className={styles.products}>
-        {shopListContext?.products.map((product, index) => (
-          <li key={index} className={styles.product}>
+        {shopListContext?.products.map((product) => (
+          <li key={product.uid} className={styles.product}>
             <span>{product.name} </span>
             <span className={styles.dots}></span>
             <span>
-              {product.amount} {product.units}
+              {product.amount > 0 && product.amount}{" "}
+              {product.units !== "" && product.units}
             </span>
-            <ProductMenu id={product.id}></ProductMenu>
+            <ProductMenu uid={product.uid}></ProductMenu>
           </li>
         ))}
       </ul>

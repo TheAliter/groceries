@@ -13,6 +13,9 @@ import AddProduct from "./pages/AddProduct";
 import EditProduct from "./pages/EditProduct";
 
 function App() {
+
+  // TODO: update UI for PC
+
   return (
     <div className="App">
       <GlobalProvider>
@@ -30,7 +33,7 @@ function App() {
             >
               <Route path="" element={<Products />}></Route>
               <Route path="add-product" element={<AddProduct />}></Route>
-              <Route path="edit-product/:id" element={<EditProduct />}></Route>
+              <Route path="edit-product/:uid" element={<EditProduct />}></Route>
             </Route>
             <Route path="*" element={<Navigate to="/" />}></Route>
           </Routes>

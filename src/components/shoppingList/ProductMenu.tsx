@@ -1,32 +1,32 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import dbDeleteProduct from "../../database/deleteProduct";
-import useComponentVisible from "../../hooks/useComponentVisible";
+import { dbDeleteProduct } from "../../database/deleteProduct";
+import { useOverlayVisible } from "../../hooks/useOverlayVisible";
 import { useShoppingListContext } from "../../hooks/useShoppingListContext";
 import styles from "./styles/ProductMenu.module.css";
 
 interface Props {
-  id: number;
+  uid: number;
 }
 
-export default function ProductMenu({ id }: Props) {
-  const { ref, isComponentVisible, setIsComponentVisible } =
-    useComponentVisible<HTMLDivElement>(false);
+export default function ProductMenu({ uid }: Props) {
+  const { ref, isOverlayVisible, setIsOverlayVisible } =
+    useOverlayVisible<HTMLDivElement>(false);
   const shopListContext = useShoppingListContext();
   const navigate = useNavigate();
 
   function handleClick() {
-    setIsComponentVisible(!isComponentVisible);
+    setIsOverlayVisible(!isOverlayVisible);
   }
 
   function handleDelete() {
-    shopListContext?.deleteProduct(id);
-    dbDeleteProduct(shopListContext?.id ?? 0, id);
+    shopListContext?.deleteProduct(uid);
+    dbDeleteProduct(shopListContext!.id, uid);
   }
 
   function handleEdit() {
     navigate(
-      "/shopping-list/" + shopListContext?.accessKey + "/edit-product/" + id
+      "/shopping-list/" + shopListContext?.accessKey + "/edit-product/" + uid
     );
   }
 
@@ -35,7 +35,7 @@ export default function ProductMenu({ id }: Props) {
       <span onClick={handleClick} className="material-icons">
         more_vert
       </span>
-      {isComponentVisible && (
+      {isOverlayVisible && (
         <ul className={styles.menu}>
           <li onClick={handleEdit}>Rediģēt</li>
           <li onClick={handleDelete}>Izdzēst</li>

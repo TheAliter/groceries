@@ -17,3 +17,10 @@
   flex-direction: column;
   row-gap: 1rem;
 }
+
+.container p {
+  text-align: center;
+  font-style: italic;
+  color: red;
+  font-size: 0.8rem;
+}

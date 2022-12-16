@@ -3,7 +3,7 @@ import styles from "./styles/ConfirmationModal.module.css";
 
 interface Props {
   text: string;
-  handleBgClick: () => void;
+  handleBgClick?: () => void;
   handleCancel: () => void;
   handleConfirmation: () => void;
 }

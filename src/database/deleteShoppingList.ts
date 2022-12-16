@@ -1,24 +1,19 @@
 import { supabase } from "./initialize";
 
-async function dbDeleteShoppingList(id: string) {
-  let isSuccess = true;
-  const { error: shoppingListDeleteError } = await supabase
-    .from("Shopping Lists")
-    .delete()
-    .eq("access_key", id);
-
+export async function dbDeleteShoppingList(shopListId: number) {
+  // Must be correct delete order (products -> shopList)
   const { error: productsDeleteErrro } = await supabase
     .from("Products")
     .delete()
-    .eq("shopping_list_id", id);
+    .eq("shopping_list_id", shopListId);
+
+  const { error: shoppingListDeleteError } = await supabase
+    .from("Shopping Lists")
+    .delete()
+    .eq("id", shopListId);
 
   if (shoppingListDeleteError || productsDeleteErrro) {
-    console.log({ shoppingListDeleteError });
-    console.log({ productsDeleteErrro });
-    isSuccess = false;
+    console.error({ shoppingListDeleteError });
+    console.error({ productsDeleteErrro });
   }
-
-  return isSuccess;
 }
-
-export { dbDeleteShoppingList as deleteShoppingList };

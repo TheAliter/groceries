@@ -1,16 +1,16 @@
 import { supabase } from "./initialize";
 
-export default async function dbDeleteProduct(
+export async function dbDeleteProduct(
   shopListId: number,
-  productId: number
+  productUid: number
 ) {
   const { data, error } = await supabase
     .from("Products")
     .delete()
     .eq("shopping_list_id", shopListId)
-    .eq("id", productId);
+    .eq("uid", productUid);
 
   if (error) {
-    console.log(error);
+    console.error(error);
   }
 }

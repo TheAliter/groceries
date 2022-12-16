@@ -1,6 +1,6 @@
 import styles from "./styles/Welcome.module.css";
 import { useNavigate } from "react-router-dom";
-import { createShoppingList } from "../database/createShoppingList";
+import { dbCreateShoppingList } from "../database/createShoppingList";
 import { useContext, useState } from "react";
 import { GlobalContext } from "../contexts/GlobalContext";
 import Loader from "../components/Loader";
@@ -9,15 +9,18 @@ export default function Welcome() {
   const navigate = useNavigate();
   const globalContext = useContext(GlobalContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setError] = useState("");
 
   async function handleCreate() {
     setIsLoading(true);
-    const { id, isSuccess } = await createShoppingList();
+    const { accessKey, isSuccess } = await dbCreateShoppingList();
     setIsLoading(false);
 
     if (isSuccess) {
       globalContext?.updateUseShoppingListGuard(false);
-      navigate(`/shopping-list/${id}`);
+      navigate(`/shopping-list/${accessKey}`);
+    } else {
+      setError("Neizdevās izveidot iepirkumu sarakstu");
     }
   }
 
@@ -35,10 +38,13 @@ export default function Welcome() {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className={styles.actions}>
-          <button onClick={handleCreate}>Izveidot iepirkumu sarakstu</button>
-          <button onClick={handleJoin}>Apskatīt iepirkuma sarakstu</button>
-        </div>
+        <>
+          <div className={styles.actions}>
+            <button onClick={handleCreate}>Izveidot iepirkumu sarakstu</button>
+            <button onClick={handleJoin}>Apskatīt iepirkuma sarakstu</button>
+          </div>
+          {errorMsg && <p className="error-text">{errorMsg}</p>}
+        </>
       )}
     </div>
   );

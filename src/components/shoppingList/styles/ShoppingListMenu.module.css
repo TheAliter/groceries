@@ -1,5 +1,5 @@
-
-.container {
+.menu-container,
+.code-container {
   display: flex;
   flex-direction: column;
   gap: var(--padding-l);
@@ -10,6 +10,44 @@
   background-color: white;
 }
 
-.container button:last-child {
+.menu-container button:last-child {
   margin-top: var(--margin-xl);
+}
+
+.code-container p {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+}
+
+.input-container span {
+  position: absolute;
+  right: var(--margin-m);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary-color);
+}
+
+.code-container input {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: var(--padding-m);
+}
+
+.actions button {
+  width: 10rem;
+}
+
+.menu-container button, .actions button {
+  cursor: pointer;
 }

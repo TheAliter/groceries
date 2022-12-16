@@ -15,10 +15,6 @@
   row-gap: 1rem;
 }
 
-.error {
-  font-size: 0.8rem;
-  color: red;
-}
 
 .back {
   margin-top: var(--margin-xl2);

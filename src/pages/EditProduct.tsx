@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import dbCreateProduct from "../database/createProduct";
-import dbUpdateProduct from "../database/updateProduct";
+import { dbUpdateProduct } from "../database/updateProduct";
 import { useShoppingListContext } from "../hooks/useShoppingListContext";
 import Product from "../types/Product";
 import styles from "./styles/AddProduct.module.css";
@@ -9,9 +8,9 @@ import styles from "./styles/AddProduct.module.css";
 export default function EditProduct() {
   const navigate = useNavigate();
   const shopListContext = useShoppingListContext();
-  const { id } = useParams();
-  const product = shopListContext?.products.find(
-    (entry) => entry.id === parseInt(id ?? "0")
+  const { uid: productInEditUid } = useParams();
+  const productInEdit = shopListContext?.products.find(
+    (product) => product.uid === parseInt(productInEditUid!)
   );
 
   const nameField = useRef<HTMLInputElement>(null);
@@ -25,15 +24,15 @@ export default function EditProduct() {
     const amount = parseInt(amountField.current?.value ?? "0");
     const units = unitsField.current?.value ?? "";
 
-    const product = new Product(
-      parseInt(id ?? "0"),
+    const updatedProduct = new Product(
+      productInEdit!.uid,
       name,
       amount,
       units,
-      shopListContext?.id
+      shopListContext!.id
     );
-    shopListContext?.updateProduct(product);
-    dbUpdateProduct(product);
+    shopListContext?.updateProduct(updatedProduct);
+    dbUpdateProduct(updatedProduct);
     navigate(-1);
   }
 
@@ -42,15 +41,24 @@ export default function EditProduct() {
       <form onSubmit={handleSubmit}>
         <label>
           <span>Nosaukums</span>
-          <input ref={nameField} defaultValue={product?.name} required></input>
+          <input
+            ref={nameField}
+            defaultValue={productInEdit?.name}
+            required
+          ></input>
         </label>
         <label>
           <span>Daudzums</span>
-          <input ref={amountField} defaultValue={product?.amount}></input>
+          <input
+            ref={amountField}
+            defaultValue={
+              productInEdit!.amount !== 0 ? productInEdit?.amount : ""
+            }
+          ></input>
         </label>
         <label>
           <span>Mērvienība</span>
-          <input ref={unitsField} defaultValue={product?.units}></input>
+          <input ref={unitsField} defaultValue={productInEdit?.units}></input>
         </label>
         <button>Labot</button>
       </form>

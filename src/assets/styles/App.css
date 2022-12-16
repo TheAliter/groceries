@@ -39,6 +39,9 @@ button.caps {
 button.accent {
   background-color: var(--accent-color);
 }
+button.accent:hover {
+  background-color: var(--accent-color-dark);
+}
 
 a {
   font-weight: 500;
@@ -55,4 +58,7 @@ input {
   border: 1px solid lightgrey;
 }
 
-
+.error-text {
+  font-size: 0.8rem;
+  color: red;
+}

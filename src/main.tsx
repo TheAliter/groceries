@@ -4,7 +4,7 @@ import App from './App'
 import './assets/styles/index.css'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  // Helps to catch bugs by doubling render()
+  // Developing mode that helps to catch bugs by doubling render()
   <React.StrictMode>
     <App />
   </React.StrictMode>
