@@ -13,7 +13,6 @@ import EditProduct from "./pages/EditProduct";
 
 function App() {
 
-  // TODO: vercel fix access other pages 
   // TODO: fix viewport size for mobile
   return (
     <div className="App">
