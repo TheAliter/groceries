@@ -24,23 +24,24 @@ export default function AddProduct() {
     e.preventDefault();
 
     const uid = parseInt(
-      `${shopListContext!.id}000${shopListContext!.lastProductUid}`
+      `${shopListContext!.id}000${shopListContext!.lastProductUid + 1}`
     );
-    const name = nameField.current!.value;
+    const name = nameField.current!.value.trim();
     const amount =
       amountField.current?.value === ""
         ? 0
-        : parseInt(amountField.current!.value);
-    const units = unitsField.current!.value;
+        : parseInt(amountField.current!.value.trim());
+    const units = unitsField.current!.value.trim();
 
     const product = new Product(uid, name, amount, units, shopListContext!.id);
-    shopListContext?.addProduct(product);
-    shopListContext?.setLastProductUid(shopListContext.lastProductUid + 1);
     dbCreateProduct(product);
+    shopListContext?.addProduct(product);
+    // last_product_uid is without modifications
     dbUpdateShoppingListLastProductUid(
       shopListContext!.id,
-      shopListContext!.lastProductUid
+      shopListContext!.lastProductUid + 1
     );
+    shopListContext?.setLastProductUid(shopListContext!.lastProductUid + 1);
     navigate(-1);
   }
 

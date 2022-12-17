@@ -4,9 +4,7 @@
   max-width: 1280px;
   height: 100%;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
-  box-sizing: border-box;
 }
 
 .App {
@@ -63,4 +61,26 @@ input {
 .error-text {
   font-size: 0.8rem;
   color: red;
+}
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #c7c7c7 #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 4px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #c7c7c7;
+  border-radius: 8px;
+  border: 0px solid #ffffff;
 }

@@ -26,9 +26,9 @@ export default function EditProduct() {
   function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
 
-    const name = nameField.current?.value ?? "";
-    const amount = parseInt(amountField.current?.value ?? "0");
-    const units = unitsField.current?.value ?? "";
+    const name = nameField.current?.value.trim() ?? "";
+    const amount = parseInt(amountField.current?.value.trim() ?? "0");
+    const units = unitsField.current?.value.trim() ?? "";
 
     const updatedProduct = new Product(
       productInEdit!.uid,

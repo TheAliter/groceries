@@ -7,6 +7,7 @@
   margin: 0;
   padding: 0;
   list-style-type: none;
+  overflow-y: auto;
 }
 
 .empty-list {
@@ -27,8 +28,9 @@
   margin-bottom: var(--margin-s);
   padding-left: var(--padding-m);
   border-radius: 0.5rem;
-  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   text-align: start;
+  cursor: pointer;
 }
 
 .product .dots {
@@ -44,6 +46,10 @@
 }
 
 @media (min-width: 960px) {
+  .products {
+    max-height: 750px;
+  }
+
   .empty-list {
     height: 400px;
     display: flex;

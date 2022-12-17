@@ -13,7 +13,8 @@ import EditProduct from "./pages/EditProduct";
 
 function App() {
 
-  // TODO: fix viewport size for mobile
+  // TODO drag and drop/reorder
+  // TODO: create Sagataves
   return (
     <div className="App">
       <GlobalProvider>
