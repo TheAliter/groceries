@@ -2,10 +2,11 @@
 
 #root {
   max-width: 1280px;
-  height: calc(100vh - 4rem);
+  height: 100vh;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .App {
