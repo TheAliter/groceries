@@ -26,7 +26,7 @@ export default function ShoppingListMenu({ handleCloseMenu }: Props) {
   }
 
   function handleCopy() {
-    navigator.clipboard.writeText(shopListContext!.id.toString());
+    navigator.clipboard.writeText(shopListContext!.accessKey.toString());
     setCodeCopied(true);
   }
 
