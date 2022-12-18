@@ -66,7 +66,8 @@ function shoppingListReducer(
         (product) => product.uid === action.payload.uid
       );
       if (
-        originalProduct?.name !== action.payload.name ||
+        originalProduct?.rank !== action.payload.rank ||
+        originalProduct.name !== action.payload.name ||
         originalProduct.amount !== action.payload.amount ||
         originalProduct.units !== action.payload.units
       ) {
@@ -219,16 +220,16 @@ export interface ShoppingListContextInterface {
   products: Product[];
 
   // METHODS
-  setID: Function;
-  setAccessKey: Function;
-  setLastProductUid: Function;
-  setShoppingListListener: Function;
-  updateProductsList: Function;
-  addProduct: Function;
-  updateProduct: Function;
-  deleteProduct: Function;
-  handleProductListChangeFromDB: Function;
-  resetData: Function;
+  setID: (shopListId: number) => void;
+  setAccessKey: (shopListAccessKey: string) => void;
+  setLastProductUid: (lastProductUid: number) => void;
+  setShoppingListListener: (shopListListner: RealtimeChannel) => void;
+  updateProductsList: (products: Array<Product>) => void;
+  addProduct: (product: Product) => void;
+  updateProduct: (product: Product) => void;
+  deleteProduct: (productUid: number) => void;
+  handleProductListChangeFromDB: (payload: { [key: string]: any }) => void;
+  resetData: () => void;
 }
 
 enum ActionType {

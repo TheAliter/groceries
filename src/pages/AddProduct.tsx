@@ -26,6 +26,11 @@ export default function AddProduct() {
     const uid = parseInt(
       `${shopListContext!.id}000${shopListContext!.lastProductUid + 1}`
     );
+    const rank =
+      shopListContext!.products.length > 0
+        ? shopListContext!.products[shopListContext!.products.length - 1].rank +
+          100
+        : 100;
     const name = nameField.current!.value.trim();
     const amount =
       amountField.current?.value === ""
@@ -33,7 +38,14 @@ export default function AddProduct() {
         : parseInt(amountField.current!.value.trim());
     const units = unitsField.current!.value.trim();
 
-    const product = new Product(uid, name, amount, units, shopListContext!.id);
+    const product = new Product(
+      uid,
+      rank,
+      name,
+      amount,
+      units,
+      shopListContext!.id
+    );
     dbCreateProduct(product);
     shopListContext?.addProduct(product);
     // last_product_uid is without modifications

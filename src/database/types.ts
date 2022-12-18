@@ -8,6 +8,7 @@ export interface DB_Shopping_List {
 export interface DB_Product {
   uid: number;
   created_at: string;
+  rank: number;
   name: string;
   amount: number;
   units: string;

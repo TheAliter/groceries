@@ -13,7 +13,7 @@ import EditProduct from "./pages/EditProduct";
 
 function App() {
 
-  // TODO drag and drop/reorder
+  // TODO drag and drop/reorder - how to handle order keeping between sessions?
   // TODO: create Sagataves
   return (
     <div className="App">
