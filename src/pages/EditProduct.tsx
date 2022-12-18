@@ -32,6 +32,7 @@ export default function EditProduct() {
 
     const updatedProduct = new Product(
       productInEdit!.uid,
+      productInEdit!.rank,
       name,
       amount,
       units,

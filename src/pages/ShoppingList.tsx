@@ -21,7 +21,7 @@ export default function ShoppingList() {
 
   function loadAndSetAllShoppingListData() {
     // Loading and setting all data regarding shopping list
-    shopListContext!.setAccessKey(accessKey);
+    shopListContext!.setAccessKey(accessKey ?? "");
     dbGetShoppingListData(accessKey ?? "")
       .then((data) => {
         shopListContext?.setID(data.id);
