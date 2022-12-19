@@ -19,3 +19,4 @@ export function useOverlayVisible<T extends HTMLElement>(isVisible: boolean) {
 
   return { ref, isOverlayVisible, setIsOverlayVisible };
 }
+

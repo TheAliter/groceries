@@ -2,14 +2,13 @@ import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ShoppingListLayout } from "../components/Layouts";
 import Header from "../components/shoppingList/Header";
-import { dbCreateProduct } from "../database/createProduct";
-import { dbUpdateShoppingListLastProductUid } from "../database/updateShoppingListLastProductUid";
-import { useScreenSizeType } from "../hooks/useScreenSizeType";
+import { dbCreateSample } from "../database/createSample";
+import { dbUpdateShoppingListLastSampleUid } from "../database/updateShoppingListLastSampleUid";
 import { useShoppingListContext } from "../hooks/useShoppingListContext";
-import Product from "../types/Product";
-import styles from "./styles/AddProduct.module.css";
+import Sample from "../types/Sample";
+import styles from "./styles/AddSample.module.css";
 
-export default function AddProduct() {
+export default function AddSample() {
   const navigate = useNavigate();
   const shopListContext = useShoppingListContext();
 
@@ -21,11 +20,11 @@ export default function AddProduct() {
     e.preventDefault();
 
     const uid = parseInt(
-      `${shopListContext!.id}000${shopListContext!.lastProductUid + 1}`
+      `${shopListContext!.id}000${shopListContext!.lastSampleUid + 1}`
     );
     const rank =
-      shopListContext!.products.length > 0
-        ? shopListContext!.products[shopListContext!.products.length - 1].rank +
+      shopListContext!.samples.length > 0
+        ? shopListContext!.samples[shopListContext!.samples.length - 1].rank +
           100
         : 100;
     const name = nameField.current!.value.trim();
@@ -35,7 +34,7 @@ export default function AddProduct() {
         : parseInt(amountField.current!.value.trim());
     const units = unitsField.current!.value.trim();
 
-    const product = new Product(
+    const sample = new Sample(
       uid,
       rank,
       name,
@@ -43,19 +42,21 @@ export default function AddProduct() {
       units,
       shopListContext!.id
     );
-    dbCreateProduct(product);
-    shopListContext?.addProduct(product);
-    dbUpdateShoppingListLastProductUid(
+    dbCreateSample(sample);
+    shopListContext?.addSample(sample);
+    dbUpdateShoppingListLastSampleUid(
       shopListContext!.id,
-      shopListContext!.lastProductUid + 1
+      shopListContext!.lastSampleUid + 1
     );
-    shopListContext?.setLastProductUid(shopListContext!.lastProductUid + 1);
+    shopListContext?.setLastSampleUid(shopListContext!.lastSampleUid + 1);
     navigate(-1);
   }
 
   const mainContentBlock = (
     <>
-      <Header title="Pievienot preci" />
+      <Header
+        title="Pievienot sagatavi"
+      />
       <form onSubmit={handleSubmit} className={styles.form}>
         <label>
           <span>Nosaukums</span>

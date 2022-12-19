@@ -62,4 +62,11 @@
   .main-action-btn {
     max-width: 300px;
   }
+
+  .actions-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--padding-xl);
+  }
 }

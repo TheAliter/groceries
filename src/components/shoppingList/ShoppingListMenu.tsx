@@ -41,7 +41,8 @@ export default function ShoppingListMenu({ handleCloseMenu }: Props) {
   }
 
   function handleExitShopList() {
-    shopListContext?.shoppingListListener?.unsubscribe;
+    shopListContext?.productsListListener?.unsubscribe;
+    shopListContext?.samplesListListener?.unsubscribe;
     shopListContext?.resetData();
     localStorage.setItem("access_key", "");
     if (confirmationModalTitle.includes("izdzēst")) {

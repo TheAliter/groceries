@@ -2,17 +2,17 @@ import React, { useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ShoppingListLayout } from "../components/Layouts";
 import Header from "../components/shoppingList/Header";
-import { dbUpdateProduct } from "../database/updateProduct";
+import { dbUpdateSample } from "../database/updateSample";
 import { useShoppingListContext } from "../hooks/useShoppingListContext";
-import Product from "../types/Product";
-import styles from "./styles/EditProduct.module.css";
+import Sample from "../types/Sample";
+import styles from "./styles/EditSample.module.css";
 
-export default function EditProduct() {
+export default function EditSample() {
   const navigate = useNavigate();
   const shopListContext = useShoppingListContext();
-  const { uid: productInEditUid } = useParams();
-  const productInEdit = shopListContext?.products.find(
-    (product) => product.uid === parseInt(productInEditUid!)
+  const { uid: sampleInEditUid } = useParams();
+  const sampleInEdit = shopListContext?.samples.find(
+    (sample) => sample.uid === parseInt(sampleInEditUid!)
   );
 
   const nameField = useRef<HTMLInputElement>(null);
@@ -26,28 +26,30 @@ export default function EditProduct() {
     const amount = parseInt(amountField.current?.value.trim() ?? "0");
     const units = unitsField.current?.value.trim() ?? "";
 
-    const updatedProduct = new Product(
-      productInEdit!.uid,
-      productInEdit!.rank,
+    const updatedSample = new Sample(
+      sampleInEdit!.uid,
+      sampleInEdit!.rank,
       name,
       amount,
       units,
       shopListContext!.id
     );
-    shopListContext?.updateProduct(updatedProduct);
-    dbUpdateProduct(updatedProduct);
+    shopListContext?.updateSample(updatedSample);
+    dbUpdateSample(updatedSample);
     navigate(-1);
   }
 
   const mainContentBlock = (
     <>
-      <Header title="Rediģēt preci"  />
+      <Header
+        title="Rediģēt sagatavi"
+      />
       <form onSubmit={handleSubmit} className={styles.form}>
         <label>
           <span>Nosaukums</span>
           <input
             ref={nameField}
-            defaultValue={productInEdit?.name}
+            defaultValue={sampleInEdit?.name}
             required
           ></input>
         </label>
@@ -56,13 +58,13 @@ export default function EditProduct() {
           <input
             ref={amountField}
             defaultValue={
-              productInEdit!.amount !== 0 ? productInEdit?.amount : ""
+              sampleInEdit!.amount !== 0 ? sampleInEdit?.amount : ""
             }
           ></input>
         </label>
         <label>
           <span>Mērvienība</span>
-          <input ref={unitsField} defaultValue={productInEdit?.units}></input>
+          <input ref={unitsField} defaultValue={sampleInEdit?.units}></input>
         </label>
         <button>Labot</button>
       </form>
@@ -75,11 +77,7 @@ export default function EditProduct() {
     </button>
   );
 
-
   return (
-    <ShoppingListLayout
-      mainContent={mainContentBlock}
-      actions={actionsBlock}
-    />
+    <ShoppingListLayout mainContent={mainContentBlock} actions={actionsBlock} />
   );
 }

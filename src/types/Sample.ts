@@ -1,7 +1,7 @@
-import { DB_Product } from "../database/types";
-import { SampleMap } from "./Sample";
+import { DB_Sample } from "../database/types";
+import Product from "./Product";
 
-interface ProductMap {
+export interface SampleMap {
   uid: number;
   rank: number;
   name: string;
@@ -10,7 +10,7 @@ interface ProductMap {
   shopListId: number;
 }
 
-export default class Product {
+export default class Sample {
   uid: number;
   rank: number;
   name: string;
@@ -34,7 +34,7 @@ export default class Product {
     this.shopListId = shopListId;
   }
 
-  toMap(): ProductMap {
+  toMap(): SampleMap {
     return {
       uid: this.uid,
       rank: this.rank,
@@ -45,20 +45,9 @@ export default class Product {
     };
   }
 
-  static fromMap(productAsMap: ProductMap) {
-    return new Product(
-      productAsMap.uid,
-      productAsMap.rank,
-      productAsMap.name,
-      productAsMap.amount,
-      productAsMap.units,
-      productAsMap.shopListId
-    );
-  }
-
-  static fromSampleMap(sampleAsMap: SampleMap, uid: number) {
-    return new Product(
-      uid,
+  static fromMap(sampleAsMap: SampleMap) {
+    return new Sample(
+      sampleAsMap.uid,
       sampleAsMap.rank,
       sampleAsMap.name,
       sampleAsMap.amount,
@@ -78,14 +67,14 @@ export default class Product {
     };
   }
 
-  static fromDbMap(productAsMap: DB_Product) {
-    return new Product(
-      productAsMap.uid,
-      productAsMap.rank,
-      productAsMap.name,
-      productAsMap.amount,
-      productAsMap.units,
-      productAsMap.shopping_list_id
+  static fromDbMap(sampleAsMap: DB_Sample) {
+    return new Sample(
+      sampleAsMap.uid,
+      sampleAsMap.rank,
+      sampleAsMap.name,
+      sampleAsMap.amount,
+      sampleAsMap.units,
+      sampleAsMap.shopping_list_id
     );
   }
 }

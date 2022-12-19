@@ -1,14 +1,15 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { dbDeleteProduct } from "../../database/deleteProduct";
+import { dbDeleteSample } from "../../database/deleteSample";
 import { useOverlayVisible } from "../../hooks/useOverlayVisible";
 import { useShoppingListContext } from "../../hooks/useShoppingListContext";
-import styles from "./styles/ProductMenu.module.css";
+import styles from "./styles/SampleMenu.module.css";
 
 interface Props {
   uid: number;
 }
 
-export default function ProductMenu({ uid }: Props) {
+export default function SampleMenu({ uid }: Props) {
   const { ref, isOverlayVisible, setIsOverlayVisible } =
     useOverlayVisible<HTMLDivElement>(false);
   const shopListContext = useShoppingListContext();
@@ -19,17 +20,17 @@ export default function ProductMenu({ uid }: Props) {
     setIsOverlayVisible(!isOverlayVisible);
   }
 
-  function handleDelete(e: React.SyntheticEvent) {
-    e.stopPropagation();
-    shopListContext?.deleteProduct(uid);
-    dbDeleteProduct(shopListContext!.id, uid);
-  }
-
   function handleEdit(e: React.SyntheticEvent) {
     e.stopPropagation();
     navigate(
-      "/shopping-list/" + shopListContext?.accessKey + "/edit-product/" + uid
+      "/shopping-list/" + shopListContext?.accessKey + "/edit-sample/" + uid
     );
+  }
+
+  function handleDelete(e: React.SyntheticEvent) {
+    e.stopPropagation();
+    shopListContext?.deleteSample(uid);
+    dbDeleteSample(shopListContext!.id, uid);
   }
 
   return (

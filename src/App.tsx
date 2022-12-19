@@ -7,14 +7,14 @@ import Welcome from "./pages/Welcome";
 import ShoppingList from "./pages/ShoppingList";
 import JoinForm from "./pages/JoinForm";
 import { ShoppingListProvider } from "./contexts/ShoppingListContext";
-import Products from "./components/shoppingList/Products";
+import Products from "./pages/Products";
 import AddProduct from "./pages/AddProduct";
 import EditProduct from "./pages/EditProduct";
+import Samples from "./pages/Samples";
+import AddSample from "./pages/AddSample";
+import EditSample from "./pages/EditSample";
 
 function App() {
-
-  // TODO drag and drop/reorder - how to handle order keeping between sessions?
-  // TODO: create Sagataves
   return (
     <div className="App">
       <GlobalProvider>
@@ -33,6 +33,9 @@ function App() {
               <Route path="" element={<Products />}></Route>
               <Route path="add-product" element={<AddProduct />}></Route>
               <Route path="edit-product/:uid" element={<EditProduct />}></Route>
+              <Route path="samples" element={<Samples />}></Route>
+              <Route path="add-sample" element={<AddSample />}></Route>
+              <Route path="edit-sample/:uid" element={<EditSample />}></Route>
             </Route>
             <Route path="*" element={<Navigate to="/" />}></Route>
           </Routes>

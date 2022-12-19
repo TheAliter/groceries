@@ -1,0 +1,39 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  flex-grow: 1;
+  gap: var(--padding-m);
+  width: 100%;
+  max-width: 450px;
+  min-height: 400px;
+}
+
+.form label {
+  display: flex;
+  flex-direction: column;
+}
+
+.form span {
+  text-align: left;
+}
+
+.action-button {
+  width: 100%;
+  max-width: 450px;
+}
+
+@media (min-width: 960px) {
+  .form {
+    gap: var(--padding-l);
+  }
+
+  .form button {
+    margin-top: var(--margin-m);
+  }
+
+  .action-button {
+    max-width: 300px;
+  }
+
+}

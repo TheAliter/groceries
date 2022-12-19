@@ -11,6 +11,11 @@ import {
 import Product from "../types/Product";
 import Loader from "../components/Loader";
 import { dbIsValidShoppingList } from "../database/isValidShoppingList";
+import Sample from "../types/Sample";
+import {
+  dbGetSamples,
+  dbSubscribeToSamplesChanges,
+} from "../database/getSamples";
 
 export default function ShoppingList() {
   const navigate = useNavigate();
@@ -26,19 +31,30 @@ export default function ShoppingList() {
       .then((data) => {
         shopListContext?.setID(data.id);
         shopListContext?.setLastProductUid(data.last_product_uid);
+        shopListContext?.setLastSampleUid(data.last_sample_uid);
         dbGetProducts(data.id).then((products) => {
           shopListContext?.updateProductsList(
             products.map((product) => Product.fromDbMap(product))
           );
           setIsLoading(false);
         });
+        dbGetSamples(data.id).then((samples) => {
+          shopListContext?.updateSamplesList(
+            samples.map((sample) => Sample.fromDbMap(sample))
+          );
+        });
         dbSubscribeToProductsChanges(
           data.id,
           (payload: { [key: string]: any }) =>
-            shopListContext!.handleProductListChangeFromDB(payload)
+            shopListContext!.handleProductsListChangeFromDB(payload)
         ).then((listener) =>
-          shopListContext?.setShoppingListListener(listener)
+          shopListContext?.setProductsListListener(listener)
         );
+        dbSubscribeToSamplesChanges(
+          data.id,
+          (payload: { [key: string]: any }) =>
+            shopListContext!.handleSamplesListChangeFromDB(payload)
+        ).then((listener) => shopListContext?.setSamplesListListener(listener));
       })
       .catch((error) => {
         console.error(error);

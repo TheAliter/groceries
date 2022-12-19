@@ -1,21 +1,20 @@
 import { useState } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
-import { useScreenSizeType } from "../../hooks/useScreenSizeType";
-import { useShoppingListContext } from "../../hooks/useShoppingListContext";
-import { ShoppingListLayout } from "../Layouts";
-import Header from "./Header";
-import ProductMenu from "./ProductMenu";
-import ShoppingListMenu from "./ShoppingListMenu";
+import { useNavigate } from "react-router-dom";
+import { useScreenSizeType } from "../hooks/useScreenSizeType";
+import { useShoppingListContext } from "../hooks/useShoppingListContext";
+import { ShoppingListLayout } from "../components/Layouts";
+import Header from "../components/shoppingList/Header";
+import ProductMenu from "../components/shoppingList/ProductMenu";
+import ShoppingListMenu from "../components/shoppingList/ShoppingListMenu";
 import styles from "./styles/Products.module.css";
 import {
   DragDropContext,
   Draggable,
   Droppable,
   DropResult,
-  OnDragEndResponder,
 } from "react-beautiful-dnd";
-import { dbUpdateProduct } from "../../database/updateProduct";
-import Product from "../../types/Product";
+import { dbUpdateProduct } from "../database/updateProduct";
+import Product from "../types/Product";
 
 export default function Products() {
   const navigate = useNavigate();
@@ -24,7 +23,7 @@ export default function Products() {
   const [showMenu, setShowMenu] = useState(false);
 
   function handleDragEnd(result: DropResult) {
-    const { destination, source, draggableId } = result;
+    const { destination, source } = result;
 
     if (!destination) return;
 
@@ -50,13 +49,27 @@ export default function Products() {
     dbUpdateProduct(activeProduct);
   }
 
-  function handleAddProduct() {
+  function handleEdit(uid: number) {
+    navigate(
+      "/shopping-list/" + shopListContext?.accessKey + "/edit-product/" + uid
+    );
+  }
+
+  function handleNavigateToAddProduct() {
     navigate("/shopping-list/" + shopListContext?.accessKey + "/add-product");
   }
-  // TODO test dnd on mobile
+
+  function handleShowSamples() {
+    navigate("/shopping-list/" + shopListContext?.accessKey + "/samples");
+  }
   const mainContentBlock = (
     <>
-      <Header handleMenuShow={() => setShowMenu(true)} />
+      <Header
+        title="Iepirkumu saraksts"
+        handleMenuShow={() => setShowMenu(true)}
+        showMenuIcon={true}
+        showSamplesIcon={true}
+      />
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="0">
           {(provided) => (
@@ -80,6 +93,7 @@ export default function Products() {
                     >
                       {(provided) => (
                         <li
+                          onClick={() => handleEdit(product.uid)}
                           ref={provided.innerRef}
                           className={styles.product}
                           {...provided.draggableProps}
@@ -106,9 +120,22 @@ export default function Products() {
   );
 
   const actionsBlock = (
-    <button onClick={handleAddProduct} className={styles["main-action-btn"]}>
-      Pievienot preci
-    </button>
+    <div className={styles["actions-block"]}>
+      <button
+        onClick={handleNavigateToAddProduct}
+        className={styles["main-action-btn"]}
+      >
+        Pievienot preci
+      </button>
+      {screenType === "Desktop" && (
+        <button
+          onClick={handleShowSamples}
+          className={styles["main-action-btn"]}
+        >
+          Sagataves
+        </button>
+      )}
+    </div>
   );
 
   const menuBlock =

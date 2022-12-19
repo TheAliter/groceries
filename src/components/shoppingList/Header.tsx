@@ -1,30 +1,58 @@
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useShoppingListContext } from "../../hooks/useShoppingListContext";
 import styles from "./styles/Header.module.css";
 
 interface Props {
-  handleMenuShow: Function;
+  title: string;
+  handleMenuShow?: Function;
+  showMenuIcon?: boolean;
+  showSamplesIcon?: boolean;
+  showProductsIcon?: boolean;
 }
 
-export default function Header({ handleMenuShow }: Props) {
-  const [title, setTitle] = useState("");
-  const { pathname } = useLocation();
+export default function Header({
+  title,
+  handleMenuShow = () => {},
+  showMenuIcon = false,
+  showSamplesIcon = false,
+  showProductsIcon = false,
+}: Props) {
+  const navigate = useNavigate();
+  const shopListContext = useShoppingListContext();
 
-  useEffect(() => {
-    if (pathname.includes("edit-product")) {
-      setTitle("Rediģēt preci");
-    } else if (pathname.includes("add-product")) {
-      setTitle("Pievienot preci");
-    } else {
-      setTitle("Iepirkuma saraksts");
-    }
-  }, [pathname]);
+  function handleNavigateToSamples() {
+    navigate("/shopping-list/" + shopListContext?.accessKey + "/samples");
+  }
+
+  function handleNavigateToProducts() {
+    navigate("/shopping-list/" + shopListContext?.accessKey + "/");
+  }
 
   return (
     <header className={styles.container}>
       <h1>{title}</h1>
-      <div onClick={() => handleMenuShow()} className={styles["menu-icon"]}>
-        <span className="material-icons">menu</span>
+      <div className={styles["menu-icons"]}>
+        {showProductsIcon && (
+          <div
+            onClick={() => handleNavigateToProducts()}
+            className={styles["menu-icon"]}
+          >
+            <span className="material-icons-outlined">shopping_basket</span>
+          </div>
+        )}
+        {showSamplesIcon && (
+          <div
+            onClick={() => handleNavigateToSamples()}
+            className={styles["menu-icon"]}
+          >
+            <span className="material-icons">merge</span>
+          </div>
+        )}
+        {showMenuIcon && (
+          <div onClick={() => handleMenuShow()} className={styles["menu-icon"]}>
+            <span className="material-icons">menu</span>
+          </div>
+        )}
       </div>
     </header>
   );

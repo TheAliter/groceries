@@ -1,9 +1,9 @@
 import { supabase } from "./initialize";
-import { DB_Product } from "./types";
+import { DB_Sample } from "./types";
 
-export async function dbGetProducts(id: number) {
+export async function dbGetSamples(id: number) {
   let { data, error } = await supabase
-    .from("Products")
+    .from("Samples")
     .select("*")
     .eq("shopping_list_id", id);
 
@@ -11,26 +11,26 @@ export async function dbGetProducts(id: number) {
     console.error(error);
   }
 
-  return (data as Array<DB_Product>) ?? [];
+  return (data as Array<DB_Sample>) ?? [];
 }
 
-export async function dbSubscribeToProductsChanges(
+export async function dbSubscribeToSamplesChanges(
   shopListId: number,
-  handleProductsListChange: Function
+  handleSamplesListChange: Function
 ) {
-  const productsListListener = supabase
+  const samplesListListener = supabase
     .channel("custom-filter-channel")
     .on(
       "postgres_changes",
       {
         event: "*",
         schema: "public",
-        table: "Products",
+        table: "Samples",
         filter: `shopping_list_id=eq.${shopListId}`,
       },
-      (payload) => handleProductsListChange(payload)
+      (payload) => handleSamplesListChange(payload)
     )
     .subscribe();
 
-  return productsListListener;
+  return samplesListListener;
 }
