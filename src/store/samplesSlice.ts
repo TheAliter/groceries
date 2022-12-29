@@ -13,8 +13,8 @@ type Options = { updateDB: boolean };
 const defaultOptions: Options = { updateDB: false };
 
 export interface SamplesSliceType {
-  samplesListListener: RealtimeChannel | null;
   samples: Sample[];
+  samplesListListener: RealtimeChannel | null;
   setSamplesListListener: (samplesListListener: RealtimeChannel) => void;
   updateSamplesList: (samples: Array<Sample>) => void;
   addSample: (sample: Sample, options?: Options) => void;
@@ -25,8 +25,8 @@ export interface SamplesSliceType {
 }
 
 const initialState = {
-  samplesListListener: null,
   samples: Array<Sample>(),
+  samplesListListener: null,
 };
 
 export const useSampleStore = create<SamplesSliceType>()((set, get) => ({
@@ -77,10 +77,10 @@ export const useSampleStore = create<SamplesSliceType>()((set, get) => ({
       samples,
     }));
   },
-  handleSamplesListChangeFromDB: (changeData: { [key: string]: any }) => {
-    switch (changeData.eventType as "INSERT" | "UPDATE" | "DELETE") {
+  handleSamplesListChangeFromDB: (newData: { [key: string]: any }) => {
+    switch (newData.eventType as "INSERT" | "UPDATE" | "DELETE") {
       case "INSERT": {
-        let newSampleData = changeData.new as DB_Sample;
+        let newSampleData = newData.new as DB_Sample;
         if (!get().samples.some((sample) => sample.uid === newSampleData.uid)) {
           let samples = [...get().samples, Sample.fromDbMap(newSampleData)];
           set(() => ({
@@ -90,7 +90,7 @@ export const useSampleStore = create<SamplesSliceType>()((set, get) => ({
         break;
       }
       case "UPDATE": {
-        let updatedSampleData = changeData.new as DB_Sample;
+        let updatedSampleData = newData.new as DB_Sample;
         let updateSample = Sample.fromDbMap(updatedSampleData);
         let originalSample = get().samples.find(
           (sample) => sample.uid === updateSample.uid
@@ -106,7 +106,7 @@ export const useSampleStore = create<SamplesSliceType>()((set, get) => ({
         break;
       }
       case "DELETE": {
-        let deletedSampleUid = changeData.old.uid as number;
+        let deletedSampleUid = newData.old.uid as number;
         if (get().samples.some((sample) => sample.uid === deletedSampleUid)) {
           let samples = get().samples.filter(
             (sample) => sample.uid !== deletedSampleUid

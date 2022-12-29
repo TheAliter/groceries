@@ -2,10 +2,10 @@ import { supabase } from "../initialize";
 
 export async function dbSubscribeToSamplesChanges(
   shopListId: number,
-  handleSamplesListChange: Function
+  handleSamplesListChange: (newData: { [key: string]: any }) => void
 ) {
   const samplesListListener = supabase
-    .channel("custom-filter-channel")
+    .channel("samples-list")
     .on(
       "postgres_changes",
       {

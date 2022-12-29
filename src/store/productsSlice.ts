@@ -82,10 +82,10 @@ export const useProductsStore = create<ProductsSliceType>()((set, get) => ({
       products,
     }));
   },
-  handleProductsListChangeFromDB: (changeData: { [key: string]: any }) => {
-    switch (changeData.eventType as "INSERT" | "UPDATE" | "DELETE") {
+  handleProductsListChangeFromDB: (newData: { [key: string]: any }) => {
+    switch (newData.eventType as "INSERT" | "UPDATE" | "DELETE") {
       case "INSERT": {
-        let newProductData = changeData.new as DB_Product;
+        let newProductData = newData.new as DB_Product;
         let newProduct = Product.fromDbMap(newProductData);
         if (!get().products.some((product) => product.uid === newProduct.uid)) {
           let products = [...get().products, newProduct];
@@ -96,7 +96,7 @@ export const useProductsStore = create<ProductsSliceType>()((set, get) => ({
         break;
       }
       case "UPDATE": {
-        let updatedProductData = changeData.new as DB_Product;
+        let updatedProductData = newData.new as DB_Product;
         let updatedProduct = Product.fromDbMap(updatedProductData);
         let originalProduct = get().products.find(
           (product) => product.uid === updatedProduct.uid
@@ -112,7 +112,7 @@ export const useProductsStore = create<ProductsSliceType>()((set, get) => ({
         break;
       }
       case "DELETE": {
-        let deletedProductUid = changeData.old.uid as number;
+        let deletedProductUid = newData.old.uid as number;
         if (
           get().products.some((product) => product.uid === deletedProductUid)
         ) {

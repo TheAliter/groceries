@@ -89,17 +89,17 @@ export const useShoppingListStore = create<ShopppingListSliceType>()(
     loadAllData: async (accessKey: string) => {
       get().setAccessKey(accessKey);
       try {
-        let data = await dbGetShoppingListData(accessKey);
+        let shopListData = await dbGetShoppingListData(accessKey);
 
         // Populate shopping list data
-        get().setID(data.id);
-        get().setLastProductUid(data.last_product_uid);
-        get().setLastSampleUid(data.last_sample_uid);
+        get().setID(shopListData.id);
+        get().setLastProductUid(shopListData.last_product_uid);
+        get().setLastSampleUid(shopListData.last_sample_uid);
 
         // Populate products and samples data
         let [products, samples] = await Promise.all([
-          dbGetProducts(data.id),
-          dbGetSamples(data.id),
+          dbGetProducts(shopListData.id),
+          dbGetSamples(shopListData.id),
         ]);
         useProductsStore
           .getState()
@@ -113,12 +113,12 @@ export const useShoppingListStore = create<ShopppingListSliceType>()(
 
         // Set up listeners for data changes to products and samples
         let productsListener = await dbSubscribeToProductsChanges(
-          data.id,
+          shopListData.id,
           (payload: { [key: string]: any }) =>
             useProductsStore.getState().handleProductsListChangeFromDB(payload)
         );
         let samplesListener = await dbSubscribeToSamplesChanges(
-          data.id,
+          shopListData.id,
           (payload: { [key: string]: any }) =>
             useSampleStore.getState().handleSamplesListChangeFromDB(payload)
         );
