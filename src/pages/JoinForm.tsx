@@ -1,9 +1,8 @@
-import { dbIsValidShoppingList } from "../database/isValidShoppingList";
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { Loader } from "../components/_components";
+import { dbIsValidShoppingList } from "../database/_database";
 import styles from "./styles/JoinForm.module.css";
-import Loader from "../components/Loader";
 
 export default function JoinForm() {
   const [accessKey, setAccessKey] = useState("");

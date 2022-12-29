@@ -1,7 +1,7 @@
 import { DB_Product } from "../database/types";
-import { SampleMap } from "./Sample";
+import { Sample } from "./_types";
 
-interface ProductMap {
+export interface ProductMap {
   uid: number;
   rank: number;
   name: string;
@@ -10,7 +10,7 @@ interface ProductMap {
   shopListId: number;
 }
 
-export default class Product {
+export class Product {
   uid: number;
   rank: number;
   name: string;
@@ -18,14 +18,7 @@ export default class Product {
   units: string;
   shopListId: number;
 
-  constructor(
-    uid: number,
-    rank: number,
-    name: string,
-    amount: number,
-    units: string,
-    shopListId: number
-  ) {
+  constructor({ uid, rank, name, amount, units, shopListId }: ProductMap) {
     this.uid = uid;
     this.rank = rank;
     this.name = name;
@@ -45,29 +38,7 @@ export default class Product {
     };
   }
 
-  static fromMap(productAsMap: ProductMap) {
-    return new Product(
-      productAsMap.uid,
-      productAsMap.rank,
-      productAsMap.name,
-      productAsMap.amount,
-      productAsMap.units,
-      productAsMap.shopListId
-    );
-  }
-
-  static fromSampleMap(sampleAsMap: SampleMap, uid: number) {
-    return new Product(
-      uid,
-      sampleAsMap.rank,
-      sampleAsMap.name,
-      sampleAsMap.amount,
-      sampleAsMap.units,
-      sampleAsMap.shopListId
-    );
-  }
-
-  toMapForDB() {
+  toMapForDB(): DB_Product {
     return {
       uid: this.uid,
       rank: this.rank,
@@ -78,14 +49,24 @@ export default class Product {
     };
   }
 
-  static fromDbMap(productAsMap: DB_Product) {
-    return new Product(
-      productAsMap.uid,
-      productAsMap.rank,
-      productAsMap.name,
-      productAsMap.amount,
-      productAsMap.units,
-      productAsMap.shopping_list_id
-    );
+  sameAs(
+    { rank, name, amount, units }: Product | Sample,
+    { checkRank }: { checkRank: boolean } = { checkRank: false }
+  ): boolean {
+    // Rank checking is for reordering check (example: when receiving update from DB)
+    if (checkRank) {
+      if (this.rank !== rank) return false;
+    }
+
+    return this.name === name && this.amount === amount && this.units === units;
   }
+
+  static fromMap = (productMap: ProductMap) => new Product(productMap);
+
+  static fromDbMap = (dbProduct: DB_Product) => {
+    return new Product({
+      ...dbProduct,
+      shopListId: dbProduct.shopping_list_id,
+    });
+  };
 }

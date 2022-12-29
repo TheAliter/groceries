@@ -1,7 +1,13 @@
-import Modal from "./Modal";
 import styles from "./styles/ConfirmationModal.module.css";
+import { Modal } from "./_components";
+
+export enum ConfirmationModalType {
+  DELETE_SHOPPING_LIST,
+  LEAVE_SHOPPING_LIST,
+}
 
 interface Props {
+  type?: ConfirmationModalType;
   text: string;
   handleBgClick?: () => void;
   handleCancel: () => void;
@@ -9,6 +15,7 @@ interface Props {
 }
 
 export default function ConfirmationModal({
+  type,
   text,
   handleBgClick,
   handleCancel,

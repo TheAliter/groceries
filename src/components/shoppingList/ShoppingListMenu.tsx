@@ -1,10 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { dbDeleteShoppingList } from "../../database/deleteShoppingList";
-import { useScreenSizeType } from "../../hooks/useScreenSizeType";
-import { useShoppingListContext } from "../../hooks/useShoppingListContext";
-import ConfirmationModal from "../ConfirmationModal";
-import Modal from "../Modal";
+import { dbDeleteShoppingList } from "../../database/_database";
+import { ScreenType, useScreenSizeType } from "../../hooks/_hooks";
+import {
+  useProductsStore,
+  useSampleStore,
+  useShoppingListStore,
+} from "../../store/_store";
+import {
+  ConfirmationModal,
+  ConfirmationModalType,
+  Modal,
+} from "../_components";
 import styles from "./styles/ShoppingListMenu.module.css";
 
 interface Props {
@@ -17,36 +24,42 @@ export default function ShoppingListMenu({ handleCloseMenu }: Props) {
   const [showDeleteOrLeaveConfirmation, setShowDeleteOrLeaveConfirmation] =
     useState(false);
   const [confirmationModalTitle, setConfirmationModalTitle] = useState("");
-  const shopListContext = useShoppingListContext();
+  const [confirmationModalType, setConfirmationModalType] =
+    useState<ConfirmationModalType>();
   const navigate = useNavigate();
   const screenType = useScreenSizeType();
+  const productsStore = useProductsStore();
+  const samplesStore = useSampleStore();
+  const shoppingListStore = useShoppingListStore();
 
   function handleShowShopListCode(newState: boolean) {
     setShowShopListCode(newState);
   }
 
   function handleCopy() {
-    navigator.clipboard.writeText(shopListContext!.accessKey);
+    navigator.clipboard.writeText(shoppingListStore.accessKey);
     setCodeCopied(true);
   }
 
   function handleLeave() {
     setConfirmationModalTitle("Vai tiešām vēlies iziet no saraksta?");
+    setConfirmationModalType(ConfirmationModalType.LEAVE_SHOPPING_LIST);
     setShowDeleteOrLeaveConfirmation(true);
   }
 
   function handleShowDeleteConfirmation() {
     setConfirmationModalTitle("Vai tiešām vēlies izdzēst sarakstu?");
+    setConfirmationModalType(ConfirmationModalType.DELETE_SHOPPING_LIST);
     setShowDeleteOrLeaveConfirmation(true);
   }
 
   function handleExitShopList() {
-    shopListContext?.productsListListener?.unsubscribe;
-    shopListContext?.samplesListListener?.unsubscribe;
-    shopListContext?.resetData();
+    productsStore.productsListListener?.unsubscribe;
+    samplesStore.samplesListListener?.unsubscribe;
+    shoppingListStore.resetAllData();
     localStorage.setItem("access_key", "");
-    if (confirmationModalTitle.includes("izdzēst")) {
-      dbDeleteShoppingList(shopListContext!.id);
+    if (confirmationModalType === ConfirmationModalType.DELETE_SHOPPING_LIST) {
+      dbDeleteShoppingList(shoppingListStore.id);
     }
     navigate("/");
   }
@@ -68,7 +81,7 @@ export default function ShoppingListMenu({ handleCloseMenu }: Props) {
 
   return (
     <>
-      {screenType === "Desktop" ? (
+      {screenType === ScreenType.DESKTOP ? (
         menuBlock
       ) : !showShopListCode && !showDeleteOrLeaveConfirmation ? (
         <Modal handleBackgroundClick={handleCloseMenu}>{menuBlock}</Modal>
@@ -82,7 +95,7 @@ export default function ShoppingListMenu({ handleCloseMenu }: Props) {
               <input
                 type="text"
                 readOnly
-                value={shopListContext?.accessKey}
+                value={shoppingListStore.accessKey}
               ></input>
               {codeCopied && <span className="material-icons">check</span>}
             </div>
@@ -101,6 +114,7 @@ export default function ShoppingListMenu({ handleCloseMenu }: Props) {
 
       {showDeleteOrLeaveConfirmation && (
         <ConfirmationModal
+          type={confirmationModalType}
           text={confirmationModalTitle}
           handleBgClick={() => setShowDeleteOrLeaveConfirmation(false)}
           handleCancel={() => setShowDeleteOrLeaveConfirmation(false)}

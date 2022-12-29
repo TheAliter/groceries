@@ -1,15 +1,15 @@
 import styles from "./styles/Welcome.module.css";
 import { useNavigate } from "react-router-dom";
-import { dbCreateShoppingList } from "../database/createShoppingList";
-import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../contexts/GlobalContext";
-import Loader from "../components/Loader";
+import { useEffect, useState } from "react";
+import { usePrimaryStore } from "../store/_store";
+import { dbCreateShoppingList } from "../database/_database";
+import { Loader } from "../components/_components";
 
 export default function Welcome() {
   const navigate = useNavigate();
-  const globalContext = useContext(GlobalContext);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setError] = useState("");
+  const primaryStore = usePrimaryStore();
 
   async function handleCreate() {
     setIsLoading(true);
@@ -18,7 +18,7 @@ export default function Welcome() {
 
     if (isSuccess) {
       localStorage.setItem("access_key", accessKey);
-      globalContext?.updateUseShoppingListGuard(false);
+      primaryStore.updateUseShoppingListGuard(false);
       navigate(`/shopping-list/${accessKey}`);
     } else {
       setError("Neizdevās izveidot iepirkumu sarakstu");

@@ -8,7 +8,7 @@ export interface DB_Shopping_List {
 
 export interface DB_Product {
   uid: number;
-  created_at: string;
+  created_at?: string;
   rank: number;
   name: string;
   amount: number;
@@ -16,12 +16,4 @@ export interface DB_Product {
   shopping_list_id: number;
 }
 
-export interface DB_Sample {
-  uid: number;
-  created_at: string;
-  rank: number;
-  name: string;
-  amount: number;
-  units: string;
-  shopping_list_id: number;
-}
+export interface DB_Sample extends DB_Product {}

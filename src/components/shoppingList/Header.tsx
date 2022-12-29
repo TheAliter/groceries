@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useShoppingListContext } from "../../hooks/useShoppingListContext";
+import { useShoppingListStore } from "../../store/_store";
 import styles from "./styles/Header.module.css";
 
 interface Props {
@@ -18,14 +18,14 @@ export default function Header({
   showProductsIcon = false,
 }: Props) {
   const navigate = useNavigate();
-  const shopListContext = useShoppingListContext();
+  const shoppingListStore = useShoppingListStore();
 
   function handleNavigateToSamples() {
-    navigate("/shopping-list/" + shopListContext?.accessKey + "/samples");
+    navigate("/shopping-list/" + shoppingListStore.accessKey + "/samples");
   }
 
   function handleNavigateToProducts() {
-    navigate("/shopping-list/" + shopListContext?.accessKey + "/");
+    navigate("/shopping-list/" + shoppingListStore.accessKey + "/");
   }
 
   return (

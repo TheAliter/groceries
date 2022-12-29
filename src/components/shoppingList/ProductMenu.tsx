@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { dbDeleteProduct } from "../../database/deleteProduct";
-import { useOverlayVisible } from "../../hooks/useOverlayVisible";
-import { useShoppingListContext } from "../../hooks/useShoppingListContext";
+import { useOverlayVisible } from "../../hooks/_hooks";
+import { useProductsStore, useShoppingListStore } from "../../store/_store";
 import styles from "./styles/ProductMenu.module.css";
 
 interface Props {
@@ -11,8 +10,9 @@ interface Props {
 export default function ProductMenu({ uid }: Props) {
   const { ref, isOverlayVisible, setIsOverlayVisible } =
     useOverlayVisible<HTMLDivElement>(false);
-  const shopListContext = useShoppingListContext();
   const navigate = useNavigate();
+  const productsStore = useProductsStore();
+  const shoppingListStore = useShoppingListStore();
 
   function handleClick(e: React.SyntheticEvent) {
     e.stopPropagation();
@@ -21,14 +21,13 @@ export default function ProductMenu({ uid }: Props) {
 
   function handleDelete(e: React.SyntheticEvent) {
     e.stopPropagation();
-    shopListContext?.deleteProduct(uid);
-    dbDeleteProduct(shopListContext!.id, uid);
+    productsStore.deleteProduct(uid, {updateDB: true});
   }
 
   function handleEdit(e: React.SyntheticEvent) {
     e.stopPropagation();
     navigate(
-      "/shopping-list/" + shopListContext?.accessKey + "/edit-product/" + uid
+      "/shopping-list/" + shoppingListStore.accessKey + "/edit-product/" + uid
     );
   }
 

@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
 
+export enum ScreenType {
+  TABLET,
+  DESKTOP,
+}
+
 export function useScreenSizeType() {
   const [sizeType, setSizeType] = useState(
-    window.innerWidth < 960 ? "Tablet" : "Desktop"
+    window.innerWidth < 960 ? ScreenType.TABLET : ScreenType.DESKTOP
   );
 
   useEffect(() => {
     function handleResize() {
       if (window.innerWidth < 960) {
-        setSizeType("Tablet");
+        setSizeType(ScreenType.TABLET);
       } else {
-        setSizeType("Desktop");
+        setSizeType(ScreenType.DESKTOP);
       }
     }
 

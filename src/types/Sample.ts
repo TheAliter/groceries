@@ -1,80 +1,37 @@
 import { DB_Sample } from "../database/types";
-import Product from "./Product";
+import { Product, ProductMap } from "./_types";
 
-export interface SampleMap {
-  uid: number;
-  rank: number;
-  name: string;
-  amount: number;
-  units: string;
-  shopListId: number;
-}
+export interface SampleMap extends ProductMap {}
 
-export default class Sample {
-  uid: number;
-  rank: number;
-  name: string;
-  amount: number;
-  units: string;
-  shopListId: number;
-
-  constructor(
-    uid: number,
-    rank: number,
-    name: string,
-    amount: number,
-    units: string,
-    shopListId: number
-  ) {
-    this.uid = uid;
-    this.rank = rank;
-    this.name = name;
-    this.amount = amount;
-    this.units = units;
-    this.shopListId = shopListId;
+export class Sample extends Product {
+  constructor(sampleAsMap: SampleMap) {
+    super(sampleAsMap);
   }
 
   toMap(): SampleMap {
-    return {
-      uid: this.uid,
-      rank: this.rank,
-      name: this.name,
-      amount: this.amount,
-      units: this.units,
-      shopListId: this.shopListId,
-    };
+    return super.toMap();
   }
 
-  static fromMap(sampleAsMap: SampleMap) {
-    return new Sample(
-      sampleAsMap.uid,
-      sampleAsMap.rank,
-      sampleAsMap.name,
-      sampleAsMap.amount,
-      sampleAsMap.units,
-      sampleAsMap.shopListId
-    );
+  toMapForDB(): DB_Sample {
+    return super.toMapForDB();
   }
 
-  toMapForDB() {
-    return {
-      uid: this.uid,
-      rank: this.rank,
-      name: this.name,
-      amount: this.amount,
-      units: this.units,
-      shopping_list_id: this.shopListId,
-    };
+  sameAs(
+    sampleData: Sample,
+    { checkRank }: { checkRank: boolean } = { checkRank: false }
+  ): boolean {
+    // Rank checking is for reordering check (example: when receiving update from DB)
+    return super.sameAs(sampleData, { checkRank });
   }
 
-  static fromDbMap(sampleAsMap: DB_Sample) {
-    return new Sample(
-      sampleAsMap.uid,
-      sampleAsMap.rank,
-      sampleAsMap.name,
-      sampleAsMap.amount,
-      sampleAsMap.units,
-      sampleAsMap.shopping_list_id
-    );
+  static fromMap(sampleMap: SampleMap) {
+    return new Sample(sampleMap);
+  }
+
+  static fromDbMap(dbSample: DB_Sample) {
+    return new Sample({
+      ...dbSample,
+      shopListId: dbSample.shopping_list_id,
+    });
   }
 }
