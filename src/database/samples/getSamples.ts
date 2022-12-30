@@ -1,11 +1,12 @@
 import { supabase } from "../initialize";
 import { DB_Sample } from "../types";
 
-export async function dbGetSamples(id: number) {
+export async function dbGetSamples(id: number, abortSignal: AbortSignal) {
   let { data, error } = await supabase
     .from("Samples")
     .select("*")
-    .eq("shopping_list_id", id);
+    .eq("shopping_list_id", id)
+    .abortSignal(abortSignal);
 
   if (error) {
     console.error(error);
@@ -13,5 +14,3 @@ export async function dbGetSamples(id: number) {
 
   return (data as Array<DB_Sample>) ?? [];
 }
-
-

@@ -1,10 +1,14 @@
 import { supabase } from "../initialize";
 
-export async function dbIsValidShoppingList(accessKey: string) {
+export async function dbIsValidShoppingList(
+  accessKey: string,
+  abortSignal: AbortSignal
+) {
   let { data, error } = await supabase
     .from("Shopping Lists")
     .select()
-    .eq("access_key", accessKey);
+    .eq("access_key", accessKey)
+    .abortSignal(abortSignal);
 
   if (error) {
     console.error(error);

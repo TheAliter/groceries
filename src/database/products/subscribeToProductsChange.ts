@@ -1,6 +1,6 @@
 import { supabase } from "../initialize";
 
-export async function dbSubscribeToProductsChanges(
+export function dbSubscribeToProductsChanges(
   shopListId: number,
   handleProductsListChange: (newData: { [key: string]: any }) => void
 ) {

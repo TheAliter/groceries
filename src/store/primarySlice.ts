@@ -7,7 +7,7 @@ export interface PrimarySliceType {
 }
 
 const initialState = {
-  useShoppingListGuard: false,
+  useShoppingListGuard: true,
   id: 0,
 };
 

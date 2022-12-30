@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../components/_components";
 import { dbIsValidShoppingList } from "../database/_database";
+import { usePrimaryStore } from "../store/_store";
 import styles from "./styles/JoinForm.module.css";
 
 export default function JoinForm() {
@@ -9,6 +10,7 @@ export default function JoinForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const primaryStore = usePrimaryStore();
 
   async function handleSubmit(e: FormEvent) {
     setIsLoading(true);
@@ -16,11 +18,16 @@ export default function JoinForm() {
 
     e.preventDefault();
 
-    const isValid = await dbIsValidShoppingList(accessKey);
+    let abortController = new AbortController();
+    const isValid = await dbIsValidShoppingList(
+      accessKey,
+      abortController.signal
+    );
 
     if (isValid) {
       navigate("/shopping-list/" + accessKey);
       localStorage.setItem("access_key", accessKey);
+      primaryStore.updateUseShoppingListGuard(false);
     } else {
       setIsLoading(false);
       setErrorMessage("Nepareizs piekļuves kods");

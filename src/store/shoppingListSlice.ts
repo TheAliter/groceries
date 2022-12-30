@@ -28,7 +28,7 @@ export interface ShopppingListSliceType {
   setLastProductUid: (lastProductUid: number, options?: Options) => void;
   setLastSampleUid: (lastSampleUid: number, options?: Options) => void;
   resetAllData: () => void;
-  loadAllData: (accessKey: string) => Promise<void>;
+  loadAllData: (accessKey: string, abortSignal: AbortSignal) => Promise<void>;
 }
 
 const initialParamsState = {
@@ -86,10 +86,10 @@ export const useShoppingListStore = create<ShopppingListSliceType>()(
         ...initialParamsState,
       }));
     },
-    loadAllData: async (accessKey: string) => {
+    loadAllData: async (accessKey: string, abortSignal: AbortSignal) => {
       get().setAccessKey(accessKey);
       try {
-        let shopListData = await dbGetShoppingListData(accessKey);
+        let shopListData = await dbGetShoppingListData(accessKey, abortSignal);
 
         // Populate shopping list data
         get().setID(shopListData.id);
@@ -98,9 +98,10 @@ export const useShoppingListStore = create<ShopppingListSliceType>()(
 
         // Populate products and samples data
         let [products, samples] = await Promise.all([
-          dbGetProducts(shopListData.id),
-          dbGetSamples(shopListData.id),
+          dbGetProducts(shopListData.id, abortSignal),
+          dbGetSamples(shopListData.id, abortSignal),
         ]);
+
         useProductsStore
           .getState()
           .updateProductsList(
@@ -109,25 +110,25 @@ export const useShoppingListStore = create<ShopppingListSliceType>()(
         useSampleStore
           .getState()
           .updateSamplesList(samples.map((sample) => Sample.fromDbMap(sample)));
-        get().setLoadingState(false);
 
         // Set up listeners for data changes to products and samples
-        let productsListener = await dbSubscribeToProductsChanges(
+        let productsListener = dbSubscribeToProductsChanges(
           shopListData.id,
           (payload: { [key: string]: any }) =>
             useProductsStore.getState().handleProductsListChangeFromDB(payload)
         );
-        let samplesListener = await dbSubscribeToSamplesChanges(
+        let samplesListener = dbSubscribeToSamplesChanges(
           shopListData.id,
           (payload: { [key: string]: any }) =>
             useSampleStore.getState().handleSamplesListChangeFromDB(payload)
         );
+
         useProductsStore.getState().setProductsListListener(productsListener);
         useSampleStore.getState().setSamplesListListener(samplesListener);
       } catch (error) {
         console.error(error);
-        get().setLoadingState(false);
       }
+      get().setLoadingState(false);
     },
   })
 );

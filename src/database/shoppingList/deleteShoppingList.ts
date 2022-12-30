@@ -6,17 +6,14 @@ export async function dbDeleteShoppingList(shopListId: number) {
     .from("Products")
     .delete()
     .eq("shopping_list_id", shopListId);
-
   const { error: samplesDeleteErrro } = await supabase
     .from("Samples")
     .delete()
     .eq("shopping_list_id", shopListId);
-
   const { error: shoppingListDeleteError } = await supabase
     .from("Shopping Lists")
     .delete()
     .eq("id", shopListId);
-
   if (shoppingListDeleteError || productsDeleteErrro || samplesDeleteErrro) {
     console.error({ shoppingListDeleteError });
     console.error({ productsDeleteErrro });
