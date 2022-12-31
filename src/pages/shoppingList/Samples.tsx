@@ -24,6 +24,7 @@ import { Product, Sample } from "../../types/_types";
 import { Header, SampleMenu } from "../../components/_components";
 import { ShoppingListLayout } from "../../layouts/_layouts";
 
+
 export default function Samples() {
   const navigate = useNavigate();
   const screenType = useScreenSizeType();
