@@ -5,7 +5,7 @@ import { dbIsValidShoppingList } from "../database/_database";
 import { usePrimaryStore } from "../store/_store";
 import styles from "./styles/JoinForm.module.css";
 
-export default function JoinForm() {
+export function JoinForm() {
   const [accessKey, setAccessKey] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);

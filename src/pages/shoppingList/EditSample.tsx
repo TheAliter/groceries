@@ -7,7 +7,7 @@ import { Header } from "../../components/_components";
 import { ShoppingListLayout } from "../../layouts/_layouts";
 import _ from "lodash";
 
-export default function EditSample() {
+export function EditSample() {
   const navigate = useNavigate();
   const { uid: sampleInEditUid } = useParams();
   const samplesStore = useSampleStore();

@@ -7,7 +7,7 @@ import { Header } from "../../components/_components";
 import { ShoppingListLayout } from "../../layouts/_layouts";
 import _ from "lodash";
 
-export default function AddSample() {
+export function AddSample() {
   const navigate = useNavigate();
   const samplesStore = useSampleStore();
   const shoppingListStore = useShoppingListStore();

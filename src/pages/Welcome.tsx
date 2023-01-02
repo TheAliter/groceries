@@ -5,7 +5,7 @@ import { usePrimaryStore } from "../store/_store";
 import { dbCreateShoppingList } from "../database/_database";
 import { Loader } from "../components/_components";
 
-export default function Welcome() {
+export function Welcome() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setError] = useState("");

@@ -4,33 +4,49 @@ import "./assets/styles/App.css";
 import { Loader } from "./components/_components";
 
 const Welcome = lazy(() =>
-  import("./pages/_pages").then((module) => ({ default: module.Welcome }))
+  import("./pages/Welcome").then((module) => ({
+    default: module.Welcome,
+  }))
 );
 const JoinForm = lazy(() =>
-  import("./pages/_pages").then((module) => ({ default: module.JoinForm }))
+  import("./pages/JoinForm").then((module) => ({
+    default: module.JoinForm,
+  }))
 );
 const ShoppingListContainer = lazy(() =>
-  import("./pages/_pages").then((module) => ({
+  import("./pages/shoppingList/_shoppingListPages").then((module) => ({
     default: module.ShoppingListContainer,
   }))
 );
 const Products = lazy(() =>
-  import("./pages/_pages").then((module) => ({ default: module.Products }))
-);
-const AddProduct = lazy(() =>
-  import("./pages/_pages").then((module) => ({ default: module.AddProduct }))
-);
-const EditProduct = lazy(() =>
-  import("./pages/_pages").then((module) => ({ default: module.EditProduct }))
+  import("./pages/shoppingList/_shoppingListPages").then((module) => ({
+    default: module.Products,
+  }))
 );
 const Samples = lazy(() =>
-  import("./pages/_pages").then((module) => ({ default: module.Samples }))
+  import("./pages/shoppingList/_shoppingListPages").then((module) => ({
+    default: module.Samples,
+  }))
+);
+const AddProduct = lazy(() =>
+  import("./pages/shoppingList/_shoppingListPages").then((module) => ({
+    default: module.AddProduct,
+  }))
+);
+const EditProduct = lazy(() =>
+  import("./pages/shoppingList/_shoppingListPages").then((module) => ({
+    default: module.EditProduct,
+  }))
 );
 const AddSample = lazy(() =>
-  import("./pages/_pages").then((module) => ({ default: module.AddSample }))
+  import("./pages/shoppingList/_shoppingListPages").then((module) => ({
+    default: module.AddSample,
+  }))
 );
 const EditSample = lazy(() =>
-  import("./pages/_pages").then((module) => ({ default: module.EditSample }))
+  import("./pages/shoppingList/_shoppingListPages").then((module) => ({
+    default: module.EditSample,
+  }))
 );
 
 function App() {

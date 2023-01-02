@@ -5,7 +5,7 @@ import { usePrimaryStore, useShoppingListStore } from "../../store/_store";
 import { dbIsValidShoppingList } from "../../database/_database";
 import { Loader } from "../../components/_components";
 
-export default function ShoppingList() {
+export function ShoppingListContainer() {
   const navigate = useNavigate();
   const { accessKey } = useParams();
   const primaryStore = usePrimaryStore();

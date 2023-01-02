@@ -25,7 +25,7 @@ import { Header, SampleMenu } from "../../components/_components";
 import { ShoppingListLayout } from "../../layouts/_layouts";
 
 
-export default function Samples() {
+export function Samples() {
   const navigate = useNavigate();
   const screenType = useScreenSizeType();
   const [showSnackBar, setShowSnackBar] = useState(false);

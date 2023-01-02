@@ -7,7 +7,7 @@ import { Header } from "../../components/_components";
 import { ShoppingListLayout } from "../../layouts/_layouts";
 import _ from "lodash";
 
-export default function EditProduct() {
+export function EditProduct() {
   const navigate = useNavigate();
   const { uid: productInEditUid } = useParams();
   const productsStore = useProductsStore();

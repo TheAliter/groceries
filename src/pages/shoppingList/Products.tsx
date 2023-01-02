@@ -21,7 +21,7 @@ import {
 } from "../../components/_components";
 import { ShoppingListLayout } from "../../layouts/_layouts";
 
-export default function Products() {
+export function Products() {
   const navigate = useNavigate();
   const screenType = useScreenSizeType();
   const [showMenu, setShowMenu] = useState(false);
