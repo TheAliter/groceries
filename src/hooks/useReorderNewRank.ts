@@ -7,6 +7,7 @@ export function useReorderNewRank(
 ) {
   let targetItemRank = items[destinationIndex].rank;
   if (sourceIndex > destinationIndex) {
+    // Drag up
     if (items[destinationIndex - 1] === undefined) {
       return (targetItemRank + (targetItemRank - 1)) / 2;
     } else {
@@ -14,6 +15,7 @@ export function useReorderNewRank(
       return (targetItemRank + previousProductRank) / 2;
     }
   } else {
+    // Drag down
     if (items[destinationIndex + 1] === undefined) {
       return targetItemRank + 1;
     } else {

@@ -1,7 +1,7 @@
-export { AddProduct } from "./AddProduct";
-export { AddSample } from "./AddSample";
-export { EditProduct } from "./EditProduct";
-export { EditSample } from "./EditSample";
-export { Products } from "./Products";
-export { Samples } from "./Samples";
-export { ShoppingListContainer } from "./_ShoppingListContainer";
+export * from "./AddProduct";
+export * from "./AddSample";
+export * from "./EditProduct";
+export * from "./EditSample";
+export * from "./Products";
+export * from "./Samples";
+export * from "./_ShoppingListContainer";
