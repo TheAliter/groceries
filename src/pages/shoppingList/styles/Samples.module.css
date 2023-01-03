@@ -35,6 +35,11 @@
   cursor: pointer;
 }
 
+.sample .checkmark {
+  width: 32px;
+  color: var(--primary-color);
+}
+
 .sample .dots {
   flex-grow: 1;
   display: inline-block;

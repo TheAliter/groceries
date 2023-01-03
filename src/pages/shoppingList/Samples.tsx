@@ -23,7 +23,7 @@ import {
 import { Product, Sample } from "../../types/_types";
 import { Header, SampleMenu } from "../../components/_components";
 import { ShoppingListLayout } from "../../layouts/_layouts";
-
+import { useShowCheckmark } from "../../hooks/samples/useShowCheckmark";
 
 export function Samples() {
   const navigate = useNavigate();
@@ -36,6 +36,7 @@ export function Samples() {
   const productsStore = useProductsStore();
   const samplesStore = useSampleStore();
   const shoppingListStore = useShoppingListStore();
+  const showCheckmark = useShowCheckmark();
 
   function handleDragEnd(result: DropResult) {
     const { destination, source } = result;
@@ -124,6 +125,13 @@ export function Samples() {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                         >
+                          {showCheckmark(sample) && (
+                            <span
+                              className={`${styles.checkmark} material-icons`}
+                            >
+                              checkmark
+                            </span>
+                          )}
                           <span>{sample.name} </span>
                           <span className={styles.dots}></span>
                           <span>
