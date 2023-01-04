@@ -84,3 +84,22 @@ input {
   border-radius: 8px;
   border: 0px solid #ffffff;
 }
+
+/* --- SWIPABLE LIST --- */
+.swipeable-list-item__leading-actions {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  background-color: lightcoral;
+}
+
+.swipe-action__leading {
+  display: inline-block;
+  padding-right: var(--padding-m);
+  color: white;
+  font-weight: 700;
+}
+
+.swipeable-list-item {
+  margin-bottom: var(--margin-s);
+}

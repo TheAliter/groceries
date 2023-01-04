@@ -16,9 +16,15 @@ import styles from "./styles/ShoppingListMenu.module.css";
 
 interface Props {
   handleCloseMenu: () => void;
+  toogleReordering: () => void;
+  reordering: boolean;
 }
 
-export default function ShoppingListMenu({ handleCloseMenu }: Props) {
+export default function ShoppingListMenu({
+  handleCloseMenu,
+  toogleReordering,
+  reordering,
+}: Props) {
   const [showShopListCode, setShowShopListCode] = useState(false);
   const [codeCopied, setCodeCopied] = useState(false);
   const [showDeleteOrLeaveConfirmation, setShowDeleteOrLeaveConfirmation] =
@@ -66,6 +72,17 @@ export default function ShoppingListMenu({ handleCloseMenu }: Props) {
 
   const menuBlock = (
     <div className={styles["menu-container"]}>
+      {screenType !== ScreenType.DESKTOP && (
+        <button
+          onClick={() => {
+            toogleReordering();
+            handleCloseMenu();
+          }}
+          className={styles["main-action-btn"] + (reordering ? " accent" : "")}
+        >
+          {reordering ? "Beigt pārkārtošanu" : "Pārkārtot sarakstu"}
+        </button>
+      )}
       <button onClick={() => handleShowShopListCode(true)}>
         Parādīt saraksta kodu
       </button>
