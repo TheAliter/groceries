@@ -1,5 +1,6 @@
 .main-action-btn {
   width: 100%;
+  text-transform: uppercase;
 }
 
 @media (min-width: 960px) {
