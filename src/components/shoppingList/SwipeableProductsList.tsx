@@ -44,14 +44,13 @@ export default function SwipableProductsList() {
       {productsStore.products.length === 0 ? (
         <div className={styles["empty-list"]}>Iepirkuma saraksts ir tukšs</div>
       ) : (
-        <SwipeableList key={0}>
+        <SwipeableList key={0} threshold={0.3}>
           {productsStore.products
             .sort((a, b) => a.rank - b.rank)
             .map((product) => (
               <SwipeableListItem
                 key={product.uid.toString()}
                 leadingActions={leadingActions(product)}
-                threshold={0.33}
               >
                 <li
                   onMouseDown={(e) => setMouseDownX(e.clientX)}
