@@ -37,14 +37,12 @@ export default function SwipableProductsList() {
     );
   }
 
-  // TODO fix multiple items deleting at same time but only on frontend?? Checn threshold?
-
   return (
     <ul className={styles.products}>
       {productsStore.products.length === 0 ? (
         <div className={styles["empty-list"]}>Iepirkuma saraksts ir tukšs</div>
       ) : (
-        <SwipeableList key={0} threshold={0.3}>
+        <SwipeableList key={0} threshold={0.1}>
           {productsStore.products
             .sort((a, b) => a.rank - b.rank)
             .map((product) => (
