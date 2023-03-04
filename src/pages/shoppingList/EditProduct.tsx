@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styles from "./styles/EditProduct.module.css";
 import { useProductsStore } from "../../store/_store";
@@ -6,6 +6,8 @@ import { Product } from "../../types/_types";
 import { Header } from "../../components/_components";
 import { ShoppingListLayout } from "../../layouts/_layouts";
 import _ from "lodash";
+import { getProductImage } from "../../database/_database";
+import ImageUpload from "../../components/shoppingList/ImageUpload";
 
 export function EditProduct() {
   const navigate = useNavigate();
@@ -15,6 +17,10 @@ export function EditProduct() {
     (product) => product.uid === parseInt(productInEditUid!)
   );
 
+  const [productImage, setProductImage] = useState<{
+    data_url: string;
+    file: File;
+  } | null>(null);
   const nameField = useRef<HTMLInputElement>(null);
   const amountField = useRef<HTMLInputElement>(null);
   const unitsField = useRef<HTMLInputElement>(null);
@@ -22,25 +28,38 @@ export function EditProduct() {
   function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
 
+    const imageName = productsStore.productImage
+      ? productsStore.productImage.name
+      : "";
     const name = nameField.current!.value.trim();
     let amountValue = _.toNumber(amountField.current!.value.trim());
     const amount = isNaN(amountValue) ? 0 : amountValue;
     const units = unitsField.current!.value.trim();
 
+    const updateImage = imageName !== productInEdit?.imageName;
+
     const updatedProduct = new Product({
       ...productInEdit!,
+      imageName,
       name,
       amount,
       units,
     });
-    productsStore.updateProduct(updatedProduct, { updateDB: true });
+    productsStore.updateProduct(updatedProduct, {
+      updateDB: true,
+      updateImage,
+    });
     navigate(-1);
   }
 
   const mainContentBlock = (
     <>
       <Header title="Rediģēt preci" />
-      <form onSubmit={handleSubmit} className={styles.form}>
+      <div className={styles.form}>
+        <label>
+          <span>Bilde</span>
+          <ImageUpload type="product" image={productImage} />
+        </label>
         <label>
           <span>Nosaukums</span>
           <input
@@ -63,8 +82,8 @@ export function EditProduct() {
           <span>Mērvienība</span>
           <input ref={unitsField} defaultValue={productInEdit!.units}></input>
         </label>
-        <button>Labot</button>
-      </form>
+        <button onClick={handleSubmit}>Labot</button>
+      </div>
     </>
   );
 
@@ -73,6 +92,18 @@ export function EditProduct() {
       Atcelt
     </button>
   );
+
+  useEffect(() => {
+    if (productInEdit!.imageName) {
+      getProductImage(productInEdit!.imageName).then((res) => {
+        var file = new File([res!], productInEdit!.imageName);
+        setProductImage({
+          data_url: URL.createObjectURL(res!),
+          file,
+        });
+      });
+    }
+  }, []);
 
   return (
     <ShoppingListLayout mainContent={mainContentBlock} actions={actionsBlock} />

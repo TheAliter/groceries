@@ -6,6 +6,7 @@ import { Product } from "../../types/_types";
 import { Header } from "../../components/_components";
 import { ShoppingListLayout } from "../../layouts/_layouts";
 import _ from "lodash";
+import ImageUpload from "../../components/shoppingList/ImageUpload";
 
 export function AddProduct() {
   const navigate = useNavigate();
@@ -24,6 +25,10 @@ export function AddProduct() {
       productsStore.products.length > 0
         ? productsStore.products[productsStore.products.length - 1].rank + 1
         : 1;
+
+    const imageName = productsStore.productImage
+      ? productsStore.productImage.name
+      : "";
     const name = nameField.current!.value.trim();
     let amountValue = _.toNumber(amountField.current!.value.trim());
     const amount = isNaN(amountValue) ? 0 : amountValue;
@@ -32,6 +37,7 @@ export function AddProduct() {
     const product = new Product({
       uid,
       rank,
+      imageName,
       name,
       amount,
       units,
@@ -47,21 +53,25 @@ export function AddProduct() {
   const mainContentBlock = (
     <>
       <Header title="Pievienot preci" />
-      <form onSubmit={handleSubmit} className={styles.form}>
+      <div className={styles.form}>
+        <label>
+          <span>Bilde</span>
+          <ImageUpload type="product" />
+        </label>
         <label>
           <span>Nosaukums</span>
           <input ref={nameField} required></input>
         </label>
         <label>
           <span>Daudzums</span>
-          <input ref={amountField} type='number'></input>
+          <input ref={amountField} type="number"></input>
         </label>
         <label>
           <span>Mērvienība</span>
           <input ref={unitsField}></input>
         </label>
-        <button>Apstiprināt</button>
-      </form>
+        <button onClick={handleSubmit}>Apstiprināt</button>
+      </div>
     </>
   );
 

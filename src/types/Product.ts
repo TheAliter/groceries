@@ -4,6 +4,7 @@ import { Sample } from "./_types";
 export interface ProductMap {
   uid: number;
   rank: number;
+  imageName: string;
   name: string;
   amount: number;
   units: string;
@@ -13,14 +14,24 @@ export interface ProductMap {
 export class Product {
   uid: number;
   rank: number;
+  imageName: string;
   name: string;
   amount: number;
   units: string;
   shopListId: number;
 
-  constructor({ uid, rank, name, amount, units, shopListId }: ProductMap) {
+  constructor({
+    uid,
+    rank,
+    imageName,
+    name,
+    amount,
+    units,
+    shopListId,
+  }: ProductMap) {
     this.uid = uid;
     this.rank = rank;
+    this.imageName = imageName;
     this.name = name;
     this.amount = amount;
     this.units = units;
@@ -31,6 +42,7 @@ export class Product {
     return {
       uid: this.uid,
       rank: this.rank,
+      imageName: this.imageName,
       name: this.name,
       amount: this.amount,
       units: this.units,
@@ -42,6 +54,7 @@ export class Product {
     return {
       uid: this.uid,
       rank: this.rank,
+      image_name: this.imageName,
       name: this.name,
       amount: this.amount,
       units: this.units,
@@ -66,6 +79,7 @@ export class Product {
   static fromDbMap = (dbProduct: DB_Product) => {
     return new Product({
       ...dbProduct,
+      imageName: dbProduct.image_name,
       shopListId: dbProduct.shopping_list_id,
     });
   };

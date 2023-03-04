@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styles from "./styles/EditSample.module.css";
 import { useSampleStore } from "../../store/_store";
@@ -6,6 +6,8 @@ import { Sample } from "../../types/_types";
 import { Header } from "../../components/_components";
 import { ShoppingListLayout } from "../../layouts/_layouts";
 import _ from "lodash";
+import ImageUpload from "../../components/shoppingList/ImageUpload";
+import { getProductImage } from "../../database/_database";
 
 export function EditSample() {
   const navigate = useNavigate();
@@ -15,32 +17,47 @@ export function EditSample() {
     (sample) => sample.uid === parseInt(sampleInEditUid!)
   );
 
+  const [sampleImage, setSampleImage] = useState<{
+    data_url: string;
+    file: File;
+  } | null>(null);
+
   const nameField = useRef<HTMLInputElement>(null);
   const amountField = useRef<HTMLInputElement>(null);
   const unitsField = useRef<HTMLInputElement>(null);
 
   function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
+    const imageName = samplesStore.sampleImage
+      ? samplesStore.sampleImage.name
+      : "";
 
     const name = nameField.current?.value.trim() ?? "";
     let amountValue = _.toNumber(amountField.current!.value.trim());
     const amount = isNaN(amountValue) ? 0 : amountValue;
     const units = unitsField.current?.value.trim() ?? "";
 
+    const updateImage = imageName !== sampleInEdit?.imageName;
+
     const updatedSample = new Sample({
       ...sampleInEdit!,
+      imageName,
       name,
       amount,
       units,
     });
-    samplesStore.updateSample(updatedSample, { updateDB: true });
+    samplesStore.updateSample(updatedSample, { updateDB: true, updateImage });
     navigate(-1);
   }
 
   const mainContentBlock = (
     <>
       <Header title="Rediģēt sagatavi" />
-      <form onSubmit={handleSubmit} className={styles.form}>
+      <div className={styles.form}>
+        <label>
+          <span>Bilde</span>
+          <ImageUpload type="sample" image={sampleImage} />
+        </label>
         <label>
           <span>Nosaukums</span>
           <input
@@ -63,8 +80,8 @@ export function EditSample() {
           <span>Mērvienība</span>
           <input ref={unitsField} defaultValue={sampleInEdit?.units}></input>
         </label>
-        <button>Labot</button>
-      </form>
+        <button onClick={handleSubmit}>Labot</button>
+      </div>
     </>
   );
 
@@ -73,6 +90,18 @@ export function EditSample() {
       Atcelt
     </button>
   );
+
+  useEffect(() => {
+    if (sampleInEdit!.imageName) {
+      getProductImage(sampleInEdit!.imageName).then((res) => {
+        var file = new File([res!], sampleInEdit!.imageName);
+        setSampleImage({
+          data_url: URL.createObjectURL(res!),
+          file,
+        });
+      });
+    }
+  }, []);
 
   return (
     <ShoppingListLayout mainContent={mainContentBlock} actions={actionsBlock} />

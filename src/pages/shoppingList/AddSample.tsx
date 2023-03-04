@@ -6,6 +6,7 @@ import { Sample } from "../../types/_types";
 import { Header } from "../../components/_components";
 import { ShoppingListLayout } from "../../layouts/_layouts";
 import _ from "lodash";
+import ImageUpload from "../../components/shoppingList/ImageUpload";
 
 export function AddSample() {
   const navigate = useNavigate();
@@ -24,6 +25,9 @@ export function AddSample() {
       samplesStore.samples.length > 0
         ? samplesStore.samples[samplesStore.samples.length - 1].rank + 1
         : 1;
+    const imageName = samplesStore.sampleImage
+      ? samplesStore.sampleImage.name
+      : "";
     const name = nameField.current!.value.trim();
     let amountValue = _.toNumber(amountField.current!.value.trim());
     const amount = isNaN(amountValue) ? 0 : amountValue;
@@ -32,6 +36,7 @@ export function AddSample() {
     const sample = new Sample({
       uid,
       rank,
+      imageName,
       name,
       amount,
       units,
@@ -47,7 +52,11 @@ export function AddSample() {
   const mainContentBlock = (
     <>
       <Header title="Pievienot sagatavi" />
-      <form onSubmit={handleSubmit} className={styles.form}>
+      <div className={styles.form}>
+        <label>
+          <span>Bilde</span>
+          <ImageUpload type="sample" />
+        </label>
         <label>
           <span>Nosaukums</span>
           <input ref={nameField} required></input>
@@ -60,8 +69,8 @@ export function AddSample() {
           <span>Mērvienība</span>
           <input ref={unitsField}></input>
         </label>
-        <button>Apstiprināt</button>
-      </form>
+        <button onClick={handleSubmit}>Apstiprināt</button>
+      </div>
     </>
   );
 

@@ -31,6 +31,7 @@ export class Sample extends Product {
   static fromDbMap(dbSample: DB_Sample) {
     return new Sample({
       ...dbSample,
+      imageName: dbSample.image_name,
       shopListId: dbSample.shopping_list_id,
     });
   }

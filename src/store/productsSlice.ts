@@ -5,15 +5,17 @@ import {
   dbCreateProduct,
   dbDeleteProduct,
   dbUpdateProduct,
+  dbUploadProductImage,
 } from "../database/_database";
 import { Product } from "../types/_types";
 import { useShoppingListStore } from "./_store";
 
-type Options = { updateDB: boolean };
-const defaultOptions: Options = { updateDB: false };
+type Options = { updateDB: boolean; updateImage?: boolean };
+const defaultOptions: Options = { updateDB: false, updateImage: true };
 
 export interface ProductsSliceType {
   products: Product[];
+  productImage: File | null;
   productsListListener: RealtimeChannel | null;
   setProductsListListener: (productsListListener: RealtimeChannel) => void;
   updateProductsList: (products: Array<Product>) => void;
@@ -26,6 +28,7 @@ export interface ProductsSliceType {
 
 const initialState = {
   products: Array<Product>(),
+  productImage: null,
   productsListListener: null,
 };
 
@@ -41,9 +44,20 @@ export const useProductsStore = create<ProductsSliceType>()((set, get) => ({
       products,
     }));
   },
-  addProduct: (product: Product, { updateDB }: Options = defaultOptions) => {
+  addProduct: (
+    product: Product,
+    { updateDB, updateImage }: Options = defaultOptions
+  ) => {
     if (updateDB) {
       dbCreateProduct(product);
+
+      if (updateImage && product.imageName !== "") {
+        dbUploadProductImage(get().productImage!).then(() => {
+          set(() => ({
+            productImage: null,
+          }));
+        });
+      }
     }
 
     let products = [...get().products, product];
@@ -53,10 +67,18 @@ export const useProductsStore = create<ProductsSliceType>()((set, get) => ({
   },
   updateProduct: (
     updatedProduct: Product,
-    { updateDB }: Options = defaultOptions
+    { updateDB, updateImage }: Options = defaultOptions
   ) => {
     if (updateDB) {
       dbUpdateProduct(updatedProduct);
+
+      if (updateImage && updatedProduct.imageName !== "") {
+        dbUploadProductImage(get().productImage!).then(() => {
+          set(() => ({
+            productImage: null,
+          }));
+        });
+      }
     }
 
     let products = get().products.map((product) =>

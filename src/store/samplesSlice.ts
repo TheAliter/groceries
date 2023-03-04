@@ -5,15 +5,17 @@ import {
   dbCreateSample,
   dbDeleteSample,
   dbUpdateSample,
+  dbUploadProductImage,
 } from "../database/_database";
 import { Sample } from "../types/_types";
 import { useShoppingListStore } from "./_store";
 
-type Options = { updateDB: boolean };
-const defaultOptions: Options = { updateDB: false };
+type Options = { updateDB: boolean; updateImage?: boolean };
+const defaultOptions: Options = { updateDB: false, updateImage: true };
 
 export interface SamplesSliceType {
   samples: Sample[];
+  sampleImage: File | null;
   samplesListListener: RealtimeChannel | null;
   setSamplesListListener: (samplesListListener: RealtimeChannel) => void;
   updateSamplesList: (samples: Array<Sample>) => void;
@@ -26,6 +28,7 @@ export interface SamplesSliceType {
 
 const initialState = {
   samples: Array<Sample>(),
+  sampleImage: null,
   samplesListListener: null,
 };
 
@@ -41,9 +44,20 @@ export const useSampleStore = create<SamplesSliceType>()((set, get) => ({
       samples,
     }));
   },
-  addSample: (sample: Sample, { updateDB }: Options = defaultOptions) => {
+  addSample: (
+    sample: Sample,
+    { updateDB, updateImage }: Options = defaultOptions
+  ) => {
     if (updateDB) {
       dbCreateSample(sample);
+
+      if (updateImage && sample.imageName !== "") {
+        dbUploadProductImage(get().sampleImage!).then(() => {
+          set(() => ({
+            sampleImage: null,
+          }));
+        });
+      }
     }
 
     let samples = [...get().samples, sample];
@@ -53,10 +67,18 @@ export const useSampleStore = create<SamplesSliceType>()((set, get) => ({
   },
   updateSample: (
     updatedSample: Sample,
-    { updateDB }: Options = defaultOptions
+    { updateDB, updateImage }: Options = defaultOptions
   ) => {
     if (updateDB) {
       dbUpdateSample(updatedSample);
+
+      if (updateImage && updatedSample.imageName !== "") {
+        dbUploadProductImage(get().sampleImage!).then(() => {
+          set(() => ({
+            sampleImage: null,
+          }));
+        });
+      }
     }
 
     let samples = get().samples.map((sample) =>

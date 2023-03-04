@@ -10,6 +10,7 @@ export interface DB_Product {
   uid: number;
   created_at?: string;
   rank: number;
+  image_name: string;
   name: string;
   amount: number;
   units: string;

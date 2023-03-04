@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+}
+
+.mainbutton {
+  background-color: orange;
+}
+
+.imagecontainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.imageactions {
+  display: flex;
+  gap: 1rem;
+}
+
+.image {
+  max-width: 90vw;
+  max-height: 200px;
+}

@@ -70,7 +70,10 @@ export function Samples() {
       setIsSuccessfulAdd(true);
       const uid = shoppingListStore.generateNewProductUid();
       const newProduct = Product.fromMap({ ...sample.toMap(), uid });
-      productsStore.addProduct(newProduct, { updateDB: true });
+      productsStore.addProduct(newProduct, {
+        updateDB: true,
+        updateImage: false,
+      });
       shoppingListStore.setLastProductUid(
         shoppingListStore.lastProductUid + 1,
         { updateDB: true }
