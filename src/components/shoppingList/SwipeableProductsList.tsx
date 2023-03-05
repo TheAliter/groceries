@@ -63,7 +63,11 @@ export default function SwipableProductsList() {
                     {product.amount > 0 && product.amount}{" "}
                     {product.units !== "" && product.units}
                   </span>
-                  <ProductMenu uid={product.uid}></ProductMenu>
+                  <div className={styles["image-indicator"]}>
+                    {product.imageName && (
+                      <span className="material-icons">circle</span>
+                    )}
+                  </div>
                 </li>
               </SwipeableListItem>
             ))}

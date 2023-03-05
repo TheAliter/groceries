@@ -22,7 +22,7 @@
   font-size: 1.1rem;
 }
 
-  .product {
+.product {
   display: flex;
   width: 100%;
   align-items: center;
@@ -40,6 +40,19 @@
   height: 0.5rem;
   margin-inline: var(--margin-xs);
   border-bottom: 2px dotted black;
+}
+
+.image-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 32px;
+}
+
+.image-indicator > span {
+  font-size: 12px;
+  color: var(--accent-color);
 }
 
 @media (min-width: 960px) {
