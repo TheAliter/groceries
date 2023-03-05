@@ -21,6 +21,7 @@
 .action-button {
   width: 100%;
   max-width: 450px;
+  background-color: #87ceeb;
 }
 
 @media (min-width: 960px) {
@@ -35,5 +36,4 @@
   .action-button {
     max-width: 300px;
   }
-
 }
