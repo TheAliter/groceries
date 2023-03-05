@@ -54,10 +54,8 @@ export function EditSample() {
     <>
       <Header title="Rediģēt sagatavi" />
       <div className={styles.form}>
-        <label>
-          <span>Bilde</span>
-          <ImageUpload type="sample" image={sampleImage} />
-        </label>
+        <span>Bilde</span>
+        <ImageUpload type="sample" image={sampleImage} />
         <label>
           <span>Nosaukums</span>
           <input
@@ -80,7 +78,7 @@ export function EditSample() {
           <span>Mērvienība</span>
           <input ref={unitsField} defaultValue={sampleInEdit?.units}></input>
         </label>
-        <button onClick={handleSubmit}>Labot</button>
+        <button onClick={handleSubmit}>Saglabāt</button>
       </div>
     </>
   );

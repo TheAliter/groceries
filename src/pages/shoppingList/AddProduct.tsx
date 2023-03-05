@@ -54,10 +54,8 @@ export function AddProduct() {
     <>
       <Header title="Pievienot preci" />
       <div className={styles.form}>
-        <label>
-          <span>Bilde</span>
-          <ImageUpload type="product" />
-        </label>
+        <span>Bilde</span>
+        <ImageUpload type="product" />
         <label>
           <span>Nosaukums</span>
           <input ref={nameField} required></input>

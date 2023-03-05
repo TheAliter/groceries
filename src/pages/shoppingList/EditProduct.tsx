@@ -56,10 +56,8 @@ export function EditProduct() {
     <>
       <Header title="Rediģēt preci" />
       <div className={styles.form}>
-        <label>
-          <span>Bilde</span>
-          <ImageUpload type="product" image={productImage} />
-        </label>
+        <span>Bilde</span>
+        <ImageUpload type="product" image={productImage} />
         <label>
           <span>Nosaukums</span>
           <input
@@ -82,7 +80,7 @@ export function EditProduct() {
           <span>Mērvienība</span>
           <input ref={unitsField} defaultValue={productInEdit!.units}></input>
         </label>
-        <button onClick={handleSubmit}>Labot</button>
+        <button onClick={handleSubmit}>Saglabāt</button>
       </div>
     </>
   );

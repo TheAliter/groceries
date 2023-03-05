@@ -53,10 +53,8 @@ export function AddSample() {
     <>
       <Header title="Pievienot sagatavi" />
       <div className={styles.form}>
-        <label>
-          <span>Bilde</span>
-          <ImageUpload type="sample" />
-        </label>
+        <span>Bilde</span>
+        <ImageUpload type="sample" />
         <label>
           <span>Nosaukums</span>
           <input ref={nameField} required></input>

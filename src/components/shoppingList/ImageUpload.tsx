@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, SyntheticEvent } from "react";
 import ImageUploading from "react-images-uploading";
 import { useProductsStore, useSampleStore } from "../../store/_store";
 import styles from "./styles/ImageUpload.module.css";
+import { PhotoProvider, PhotoView } from "react-photo-view";
+import "react-photo-view/dist/react-photo-view.css";
 
 type ProductType = "sample" | "product";
 
@@ -45,7 +47,6 @@ export default function Header({ image, type }: Props) {
       {({
         imageList,
         onImageUpload,
-        onImageRemoveAll,
         onImageUpdate,
         onImageRemove,
         dragProps,
@@ -61,13 +62,30 @@ export default function Header({ image, type }: Props) {
               Pievienot bildi
             </button>
           )}
-          &nbsp;
           {imageList.map((image, index) => (
             <div key={index} className={styles.imagecontainer}>
-              <img src={image["data_url"]} alt="" className={styles.image} />
+              <PhotoProvider>
+                <PhotoView src={image["data_url"]}>
+                  <img
+                    className={styles.image}
+                    src={image["data_url"]}
+                    alt=""
+                  />
+                </PhotoView>
+              </PhotoProvider>
               <div className={styles.imageactions}>
-                <button onClick={() => onImageUpdate(index)}>MAINĪT</button>
-                <button onClick={() => onImageRemove(index)}>DZĒST</button>
+                <button
+                  className={styles.actionbutton}
+                  onClick={() => onImageUpdate(index)}
+                >
+                  MAINĪT
+                </button>
+                <button
+                  className={styles.actionbutton}
+                  onClick={() => onImageRemove(index)}
+                >
+                  DZĒST
+                </button>
               </div>
             </div>
           ))}
