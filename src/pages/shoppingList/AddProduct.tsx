@@ -43,7 +43,7 @@ export function AddProduct() {
       units,
       shopListId: shoppingListStore.id,
     });
-    productsStore.addProduct(product, { updateDB: true });
+    productsStore.addProduct(product, { updateDB: true, updateImage: true });
     shoppingListStore.setLastProductUid(shoppingListStore.lastProductUid + 1, {
       updateDB: true,
     });

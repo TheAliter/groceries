@@ -37,7 +37,10 @@ export default function DragableProductsList() {
       destination.index,
       productsStore.products
     );
-    productsStore.updateProduct(activeProduct, { updateDB: true });
+    productsStore.updateProduct(activeProduct, {
+      updateDB: true,
+      updateImage: false,
+    });
   }
 
   function handleEdit(uid: number) {

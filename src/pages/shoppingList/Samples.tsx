@@ -58,7 +58,10 @@ export function Samples() {
       destination.index,
       samplesStore.samples
     );
-    samplesStore.updateSample(activeSample, { updateDB: true });
+    samplesStore.updateSample(activeSample, {
+      updateDB: true,
+      updateImage: false,
+    });
   }
 
   function handleSampleClick(sample: Sample) {

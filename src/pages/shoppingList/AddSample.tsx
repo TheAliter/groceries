@@ -42,7 +42,7 @@ export function AddSample() {
       units,
       shopListId: shoppingListStore.id,
     });
-    samplesStore.addSample(sample, { updateDB: true });
+    samplesStore.addSample(sample, { updateDB: true, updateImage: true });
     shoppingListStore.setLastSampleUid(shoppingListStore.lastSampleUid + 1, {
       updateDB: true,
     });

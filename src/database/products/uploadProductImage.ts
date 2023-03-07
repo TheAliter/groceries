@@ -3,7 +3,7 @@ import Compressor from "compressorjs";
 
 export async function dbUploadProductImage(productImageFile: File) {
   new Compressor(productImageFile, {
-    quality: 0.6,
+    quality: 0.33,
     success: async (compressedResult) => {
       const { data, error } = await supabase.storage
         .from("pictures")
