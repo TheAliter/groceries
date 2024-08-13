@@ -46,16 +46,36 @@ export function EditSample() {
       amount,
       units,
     });
+
     samplesStore.updateSample(updatedSample, { updateDB: true, updateImage });
+
     navigate(-1);
   }
+  
+  useEffect(() => {
+    if (sampleInEdit!.imageName) {
+      getProductImage(sampleInEdit!.imageName).then((res) => {
+        var file = new File([res!], sampleInEdit!.imageName);
+
+        samplesStore.sampleImage = file
+
+        setSampleImage({
+          data_url: URL.createObjectURL(res!),
+          file,
+        });
+      });
+    }
+  }, []);
 
   const mainContentBlock = (
     <>
       <Header title="Rediģēt sagatavi" />
+
       <div className={styles.form}>
         <span>Bilde</span>
+
         <ImageUpload type="sample" image={sampleImage} />
+
         <label>
           <span>Nosaukums</span>
           <input
@@ -64,6 +84,7 @@ export function EditSample() {
             required
           ></input>
         </label>
+
         <label>
           <span>Daudzums</span>
           <input
@@ -74,10 +95,12 @@ export function EditSample() {
             }
           ></input>
         </label>
+
         <label>
           <span>Mērvienība</span>
           <input ref={unitsField} defaultValue={sampleInEdit?.units}></input>
         </label>
+
         <button onClick={handleSubmit}>Saglabāt</button>
       </div>
     </>
@@ -88,18 +111,6 @@ export function EditSample() {
       Atcelt
     </button>
   );
-
-  useEffect(() => {
-    if (sampleInEdit!.imageName) {
-      getProductImage(sampleInEdit!.imageName).then((res) => {
-        var file = new File([res!], sampleInEdit!.imageName);
-        setSampleImage({
-          data_url: URL.createObjectURL(res!),
-          file,
-        });
-      });
-    }
-  }, []);
 
   return (
     <ShoppingListLayout mainContent={mainContentBlock} actions={actionsBlock} />

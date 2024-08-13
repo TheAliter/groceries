@@ -45,29 +45,54 @@ export function EditProduct() {
       amount,
       units,
     });
+
     productsStore.updateProduct(updatedProduct, {
       updateDB: true,
       updateImage,
     });
+
     navigate(-1);
   }
+
+  useEffect(() => {
+    if (productInEdit!.imageName) {
+      getProductImage(productInEdit!.imageName).then((res) => {
+        var file = new File([res!], productInEdit!.imageName);
+
+        productsStore.productImage = file
+
+        setProductImage({
+          data_url: URL.createObjectURL(res!),
+          file,
+        });
+      });
+    }
+  }, []);
 
   const mainContentBlock = (
     <>
       <Header title="Rediģēt preci" />
+
       <div className={styles.form}>
         <span>Bilde</span>
+
         <ImageUpload type="product" image={productImage} />
+
+        {/* Nosaukums */}
         <label>
           <span>Nosaukums</span>
+
           <input
             ref={nameField}
             defaultValue={productInEdit!.name}
             required
           ></input>
         </label>
+
+        {/* Daudzums */}
         <label>
           <span>Daudzums</span>
+
           <input
             ref={amountField}
             type="number"
@@ -76,10 +101,14 @@ export function EditProduct() {
             }
           ></input>
         </label>
+
+        {/* Mērvienība */}
         <label>
           <span>Mērvienība</span>
+
           <input ref={unitsField} defaultValue={productInEdit!.units}></input>
         </label>
+
         <button onClick={handleSubmit}>Saglabāt</button>
       </div>
     </>
@@ -90,18 +119,6 @@ export function EditProduct() {
       Atcelt
     </button>
   );
-
-  useEffect(() => {
-    if (productInEdit!.imageName) {
-      getProductImage(productInEdit!.imageName).then((res) => {
-        var file = new File([res!], productInEdit!.imageName);
-        setProductImage({
-          data_url: URL.createObjectURL(res!),
-          file,
-        });
-      });
-    }
-  }, []);
 
   return (
     <ShoppingListLayout mainContent={mainContentBlock} actions={actionsBlock} />

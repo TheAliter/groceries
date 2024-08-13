@@ -19,9 +19,14 @@ export default function Header({ image, type }: Props) {
   const [images, setImages] = useState<Array<any>>([]);
   const maxNumber = 1;
 
-  const onChange = (imageList: any, addUpdateIndex: any) => {
+  const onChange = (imageList: any) => {
     // data for submit
     setImages(imageList);
+
+    if (imageList.length === 0) {
+      productsStore.productImage = null
+      return
+    }
 
     if (type === "product") {
       if (imageList[0]) productsStore.productImage = imageList[0].file;
