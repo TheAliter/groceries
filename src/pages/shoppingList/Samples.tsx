@@ -7,7 +7,7 @@ import {
   DropResult,
 } from "react-beautiful-dnd";
 import Snackbar from "@mui/material/Snackbar";
-import React, { useState } from "react";
+import React, { ChangeEvent, ChangeEventHandler, useEffect, useRef, useState } from "react";
 import { Alert } from "@mui/material";
 import { SnackbarCloseReason } from "@mui/base";
 import {
@@ -28,15 +28,26 @@ import { useShowCheckmark } from "../../hooks/samples/useShowCheckmark";
 export function Samples() {
   const navigate = useNavigate();
   const screenType = useScreenSizeType();
+  const [showSearch, setShowSearch] = useState(false);
   const [showSnackBar, setShowSnackBar] = useState(false);
   const [isSuccessfulAdd, setIsSuccessfulAdd] = useState(true);
   const [snackbarKey, setSnackbarKey] = useState(
     Math.floor(Math.random() * 1000000)
   );
+
+  const [filteredSamples, setFilteredSamples] = useState<Sample[]>([]);
   const productsStore = useProductsStore();
   const samplesStore = useSampleStore();
   const shoppingListStore = useShoppingListStore();
   const showCheckmark = useShowCheckmark();
+  const [searchTerm, setSearchTerm] = useState('')
+
+  useEffect(() => {
+    const filtered = samplesStore.samples.filter((sample) =>
+        sample.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredSamples(filtered);
+  }, [samplesStore.samples, searchTerm]);
 
   function handleDragEnd(result: DropResult) {
     const { destination, source } = result;
@@ -92,6 +103,16 @@ export function Samples() {
     setShowSnackBar(false);
   }
 
+  function toggleSearch() {
+    setShowSearch(!showSearch)
+    setSearchTerm('')
+  }
+
+  function handleSearch(event: ChangeEvent<HTMLInputElement>) {
+    const value = event.target.value;
+    setSearchTerm(value);
+  }
+
   function handleNavigateToAddSample() {
     navigate("/shopping-list/" + shoppingListStore.accessKey + "/add-sample");
   }
@@ -101,7 +122,21 @@ export function Samples() {
   }
   const mainContentBlock = (
     <>
-      <Header title="Sagataves" showProductsIcon={true} />
+        <Header 
+            title="Sagataves" 
+            showSearchIcon={true}
+            toggleSearch={toggleSearch}
+            showProductsIcon={true} 
+        />
+
+        {showSearch && ( 
+            <input
+                value={searchTerm}
+                onChange={handleSearch}
+                placeholder="Preces nosaukums"
+                style={{marginBottom: '12px'}}>
+            </input>)}
+
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="0">
           {(provided) => (
@@ -110,12 +145,12 @@ export function Samples() {
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {samplesStore.samples.length === 0 ? (
+              {filteredSamples.length === 0 ? (
                 <div className={styles["empty-list"]}>
                   Sagatavju saraksts ir tukšs
                 </div>
               ) : (
-                samplesStore.samples
+                filteredSamples
                   .sort((a, b) => a.rank - b.rank)
                   .map((sample, index) => (
                     <Draggable
