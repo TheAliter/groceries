@@ -113,6 +113,10 @@ export function Samples() {
     setSearchTerm(value);
   }
 
+  function handleSearchClear() {
+    setSearchTerm('');
+  }
+
   function handleNavigateToAddSample() {
     navigate("/shopping-list/" + shoppingListStore.accessKey + "/add-sample");
   }
@@ -130,14 +134,53 @@ export function Samples() {
         />
 
         {showSearch && ( 
-            <input
-                value={searchTerm}
-                onChange={handleSearch}
-                placeholder="Preces nosaukums"
-                style={{marginBottom: '12px'}}>
-            </input>)}
+            <div style={{position: 'relative', display: 'flex', marginBottom: '12px'}}>
+                <input
+                    value={searchTerm}
+                    onChange={handleSearch}
+                    placeholder="Preces nosaukums"
+                    style={{ flex: "1"}}>
+                </input>
+                { searchTerm && <div onClick={handleSearchClear} style={{position: "absolute", right: '10px', height: "100%", alignContent: "center", width: "40px"}}>X</div>}
+            </div>
+        )}
 
-      <DragDropContext onDragEnd={handleDragEnd}>
+        { searchTerm ?
+          (<ul
+            className={styles.samples}
+          >
+            {filteredSamples.length === 0 ? (
+              <div className={styles["empty-list"]}>
+                Nav atrasta neviena sagatave
+              </div>
+            ) : (
+              filteredSamples
+                .sort((a, b) => a.rank - b.rank)
+                .map((sample) => (
+                    <li
+                        onClick={() => handleSampleClick(sample)}
+                        className={styles.sample}>
+
+                        {showCheckmark(sample) && (
+                            <span className={`${styles.checkmark} material-icons`}>
+                                checkmark
+                            </span>
+                        )}
+
+                        <span>{sample.name} </span>
+
+                        <span className={styles.dots}></span>
+
+                        <span>
+                            {sample.amount > 0 && sample.amount}{" "}
+                            {sample.units !== "" && sample.units}
+                        </span>
+                        
+                        <SampleMenu uid={sample.uid}></SampleMenu>
+                    </li>
+                )))}
+          </ul>)
+      : (<DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="0">
           {(provided) => (
             <ul
@@ -145,12 +188,12 @@ export function Samples() {
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {filteredSamples.length === 0 ? (
+              {samplesStore.samples.length === 0 ? (
                 <div className={styles["empty-list"]}>
                   Sagatavju saraksts ir tukšs
                 </div>
               ) : (
-                filteredSamples
+                samplesStore.samples
                   .sort((a, b) => a.rank - b.rank)
                   .map((sample, index) => (
                     <Draggable
@@ -189,7 +232,7 @@ export function Samples() {
             </ul>
           )}
         </Droppable>
-      </DragDropContext>
+      </DragDropContext>)}
     </>
   );
 
