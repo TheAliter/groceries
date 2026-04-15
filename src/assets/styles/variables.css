@@ -1,10 +1,11 @@
 :root {
-  --primary-color: #8cc051;
-  --primary-color-light: #b9db93;
-  --accent-color: #8551c0;
-  --accent-color-dark: #7a4bb1;
-  --btn-color: #8cc051;
-  --btn-color-hover: #64a41c;
+  --primary-color: #7a1f35;
+  --primary-color-light: #a24e63;
+  --accent-color: #c89b3c;
+  --accent-color-dark: #a78331;
+  --btn-color: #7a1f35;
+  --btn-color-hover: #63182b;
+  --danger-color: #9a2740;
 
   --margin-xs: 0.25rem;
   --margin-s: 0.5rem;
