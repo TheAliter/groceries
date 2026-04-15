@@ -21,7 +21,11 @@
 .action-button {
   width: 100%;
   max-width: 450px;
-  background-color: #87ceeb;
+  background-color: var(--accent-color);
+}
+
+.action-button:hover {
+  background-color: var(--accent-color-dark);
 }
 
 @media (min-width: 960px) {

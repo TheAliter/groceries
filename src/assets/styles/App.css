@@ -60,14 +60,14 @@ input {
 
 .error-text {
   font-size: 0.8rem;
-  color: red;
+  color: var(--danger-color);
 }
 
 /* ===== Scrollbar CSS ===== */
 /* Firefox */
 * {
   scrollbar-width: auto;
-  scrollbar-color: #c7c7c7 #ffffff;
+  scrollbar-color: #bfaea4 #fffaf7;
 }
 
 /* Chrome, Edge, and Safari */
@@ -76,13 +76,13 @@ input {
 }
 
 *::-webkit-scrollbar-track {
-  background: #ffffff;
+  background: #fffaf7;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #c7c7c7;
+  background-color: #bfaea4;
   border-radius: 8px;
-  border: 0px solid #ffffff;
+  border: 0px solid #fffaf7;
 }
 
 /* --- SWIPABLE LIST --- */
@@ -90,7 +90,7 @@ input {
   display: flex;
   align-items: center;
   justify-content: right;
-  background-color: lightcoral;
+  background-color: var(--danger-color);
 }
 
 .swipe-action__leading {

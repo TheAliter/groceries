@@ -3,7 +3,11 @@
 }
 
 .mainbutton {
-  background-color: orange;
+  background-color: var(--accent-color);
+}
+
+.mainbutton:hover {
+  background-color: var(--accent-color-dark);
 }
 
 .imagecontainer {

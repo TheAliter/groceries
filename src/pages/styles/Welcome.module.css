@@ -21,6 +21,6 @@
 .container p {
   text-align: center;
   font-style: italic;
-  color: red;
+  color: var(--danger-color);
   font-size: 0.8rem;
 }
