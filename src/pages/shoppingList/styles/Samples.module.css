@@ -1,3 +1,55 @@
+.search-field-row {
+  position: relative;
+  display: flex;
+  margin-bottom: var(--margin-l);
+}
+
+.search-input {
+  flex: 1;
+}
+
+.search-input-with-clear {
+  padding-right: 2.75rem;
+}
+
+.search-clear-button {
+  position: absolute;
+  right: 0.35rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+  color: var(--primary-color);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.search-clear-button:hover {
+  background-color: rgba(122, 31, 53, 0.1);
+  color: var(--btn-color-hover);
+  box-shadow: 0 0 0 1px rgba(122, 31, 53, 0.12);
+}
+
+.search-clear-button:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.search-clear-button .material-icons {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
 .samples {
   width: 100%;
   min-height: 400px;

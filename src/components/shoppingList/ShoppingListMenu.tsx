@@ -73,26 +73,44 @@ export default function ShoppingListMenu({
   const menuBlock = (
     <div className={styles["menu-container"]}>
       {screenType !== ScreenType.DESKTOP && (
-        <button
-          onClick={() => {
-            toogleReordering();
-            handleCloseMenu();
-          }}
-          className={styles["main-action-btn"] + (reordering ? " accent" : "")}
-        >
-          {reordering ? "Beigt pārkārtošanu" : "Pārkārtot sarakstu"}
-        </button>
+        <div className={styles["menu-group"]}>
+          <button
+            onClick={() => {
+              toogleReordering();
+              handleCloseMenu();
+            }}
+            className={styles["main-action-btn"] + (reordering ? " accent" : "")}
+          >
+            {reordering ? "Beigt pārkārtošanu" : "Pārkārtot sarakstu"}
+          </button>
+        </div>
       )}
-      <button onClick={() => handleShowShopListCode(true)}>
-        Parādīt saraksta kodu
-      </button>
-      <button onClick={handleLeave}>Iziet no saraksta</button>
-      <button onClick={handleShowDeleteConfirmation} className="accent">
-        Izdzēst sarakstu
-      </button>
-      <button onClick={handleCloseMenu} className={styles["close-menu"]}>
-        Aizvērt
-      </button>
+      <div className={styles["menu-group"]}>
+        <button
+          type="button"
+          onClick={() => handleShowShopListCode(true)}
+          className={styles["outline-button"]}
+        >
+          Parādīt saraksta kodu
+        </button>
+        <button
+          type="button"
+          onClick={handleLeave}
+          className={styles["outline-button"]}
+        >
+          Iziet no saraksta
+        </button>
+        <button onClick={handleShowDeleteConfirmation} className="accent">
+          Izdzēst sarakstu
+        </button>
+      </div>
+      {screenType !== ScreenType.DESKTOP && (
+        <div className={styles["menu-group"]}>
+          <button onClick={handleCloseMenu} className={styles["close-menu"]}>
+            Aizvērt
+          </button>
+        </div>
+      )}
     </div>
   );
 

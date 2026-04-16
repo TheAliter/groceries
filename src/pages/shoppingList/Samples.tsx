@@ -40,7 +40,8 @@ export function Samples() {
   const samplesStore = useSampleStore();
   const shoppingListStore = useShoppingListStore();
   const showCheckmark = useShowCheckmark();
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm, setSearchTerm] = useState('');
+  const searchInputReference = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const filtered = samplesStore.samples.filter((sample) =>
@@ -48,6 +49,12 @@ export function Samples() {
     );
     setFilteredSamples(filtered);
   }, [samplesStore.samples, searchTerm]);
+
+  useEffect(() => {
+    if (showSearch) {
+      searchInputReference.current?.focus();
+    }
+  }, [showSearch]);
 
   function handleDragEnd(result: DropResult) {
     const { destination, source } = result;
@@ -133,15 +140,29 @@ export function Samples() {
             showProductsIcon={true} 
         />
 
-        {showSearch && ( 
-            <div style={{position: 'relative', display: 'flex', marginBottom: '12px'}}>
+        {showSearch && (
+            <div className={styles["search-field-row"]}>
                 <input
+                    ref={searchInputReference}
+                    className={`${styles["search-input"]}${
+                      searchTerm ? ` ${styles["search-input-with-clear"]}` : ""
+                    }`}
                     value={searchTerm}
                     onChange={handleSearch}
                     placeholder="Preces nosaukums"
-                    style={{ flex: "1"}}>
-                </input>
-                { searchTerm && <div onClick={handleSearchClear} style={{position: "absolute", right: '10px', height: "100%", alignContent: "center", width: "40px"}}>X</div>}
+                />
+                {searchTerm ? (
+                    <button
+                        type="button"
+                        className={styles["search-clear-button"]}
+                        onClick={handleSearchClear}
+                        aria-label="Notīrīt meklēšanu"
+                    >
+                        <span className="material-icons" aria-hidden="true">
+                            close
+                        </span>
+                    </button>
+                ) : null}
             </div>
         )}
 
