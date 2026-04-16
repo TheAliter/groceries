@@ -1,4 +1,4 @@
-import { useEffect, useState, SyntheticEvent } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import ImageUploading from "react-images-uploading";
 import { useProductsStore, useSampleStore } from "../../store/_store";
 import styles from "./styles/ImageUpload.module.css";
@@ -7,12 +7,18 @@ import "react-photo-view/dist/react-photo-view.css";
 
 type ProductType = "sample" | "product";
 
+export interface ImageUploadLayoutSlots {
+  addImageHeaderControl: ReactNode;
+  imageArea: ReactNode;
+}
+
 interface Props {
   type: ProductType;
   image?: { data_url: string; file: File } | null;
+  children: (slots: ImageUploadLayoutSlots) => ReactNode;
 }
 
-export default function Header({ image, type }: Props) {
+export default function ImageUpload({ image, type, children }: Props) {
   const productsStore = useProductsStore();
   const samplesStore = useSampleStore();
 
@@ -24,8 +30,12 @@ export default function Header({ image, type }: Props) {
     setImages(imageList);
 
     if (imageList.length === 0) {
-      productsStore.productImage = null
-      return
+      if (type === "product") {
+        productsStore.productImage = null;
+      } else {
+        samplesStore.sampleImage = null;
+      }
+      return;
     }
 
     if (type === "product") {
@@ -55,47 +65,90 @@ export default function Header({ image, type }: Props) {
         onImageUpdate,
         onImageRemove,
         dragProps,
-      }) => (
-        // write your building UI
-        <div className={styles.container}>
-          {images.length === 0 && (
+        isDragging,
+      }) => {
+        const addImageHeaderControl =
+          images.length === 0 ? (
             <button
-              className={styles.mainbutton}
+              type="button"
+              className={
+                styles.headerAddImageButton +
+                (isDragging ? ` ${styles.headerAddImageButtonDragging}` : "")
+              }
               onClick={() => onImageUpload()}
               {...dragProps}
+              aria-label="Pievienot bildi"
             >
-              Pievienot bildi
+              <span className="material-icons-outlined" aria-hidden="true">
+                add_photo_alternate
+              </span>
             </button>
-          )}
-          {imageList.map((image, index) => (
-            <div key={index} className={styles.imagecontainer}>
-              <PhotoProvider>
-                <PhotoView src={image["data_url"]}>
-                  <img
-                    className={styles.image}
-                    src={image["data_url"]}
-                    alt=""
-                  />
-                </PhotoView>
-              </PhotoProvider>
-              <div className={styles.imageactions}>
-                <button
-                  className={styles.actionbutton}
-                  onClick={() => onImageUpdate(index)}
-                >
-                  MAINĪT
-                </button>
-                <button
-                  className={styles.actionbutton}
-                  onClick={() => onImageRemove(index)}
-                >
-                  DZĒST
-                </button>
+          ) : null;
+
+        const imageArea = (
+          <div className={styles.container}>
+            {imageList.map((image, index) => (
+              <div key={index} className={styles.imagecontainer}>
+                <div className={styles.imagePreviewWrap}>
+                  <PhotoProvider>
+                    <PhotoView src={image["data_url"]}>
+                      <img
+                        className={styles.image}
+                        src={image["data_url"]}
+                        alt=""
+                      />
+                    </PhotoView>
+                  </PhotoProvider>
+                  <div
+                    className={styles.imageFloatingActions}
+                    role="group"
+                    aria-label="Attēla darbības"
+                  >
+                    <button
+                      type="button"
+                      className={styles.floatingActionButton}
+                      onClick={() => onImageUpdate(index)}
+                      aria-label="Mainīt attēlu"
+                    >
+                      <span
+                        className="material-icons-outlined"
+                        aria-hidden="true"
+                      >
+                        edit
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      className={
+                        styles.floatingActionButton +
+                        ` ${styles.floatingActionButtonDanger}`
+                      }
+                      onClick={() => onImageRemove(index)}
+                      aria-label="Dzēst attēlu"
+                    >
+                      <span
+                        className="material-icons-outlined"
+                        aria-hidden="true"
+                      >
+                        delete_outline
+                      </span>
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        );
+
+        return (
+          <>
+            {children({
+              addImageHeaderControl,
+              imageArea,
+            })}
+          </>
+        );
+      }}
     </ImageUploading>
   );
 }

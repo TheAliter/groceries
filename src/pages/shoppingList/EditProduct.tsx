@@ -70,48 +70,50 @@ export function EditProduct() {
   }, []);
 
   const mainContentBlock = (
-    <>
-      <Header title="Rediģēt preci" />
+    <ImageUpload type="product" image={productImage}>
+      {({ addImageHeaderControl, imageArea }) => (
+        <>
+          <Header title="Rediģēt preci" trailing={addImageHeaderControl} />
 
-      <div className={styles.form}>
-        <span>Bilde</span>
+          <div className={styles.form}>
+            {imageArea}
 
-        <ImageUpload type="product" image={productImage} />
+            {/* Nosaukums */}
+            <label>
+              <span>Nosaukums</span>
 
-        {/* Nosaukums */}
-        <label>
-          <span>Nosaukums</span>
+              <input
+                ref={nameField}
+                defaultValue={productInEdit!.name}
+                required
+              ></input>
+            </label>
 
-          <input
-            ref={nameField}
-            defaultValue={productInEdit!.name}
-            required
-          ></input>
-        </label>
+            {/* Daudzums */}
+            <label>
+              <span>Daudzums</span>
 
-        {/* Daudzums */}
-        <label>
-          <span>Daudzums</span>
+              <input
+                ref={amountField}
+                type="number"
+                defaultValue={
+                  productInEdit!.amount === 0 ? "" : productInEdit!.amount
+                }
+              ></input>
+            </label>
 
-          <input
-            ref={amountField}
-            type="number"
-            defaultValue={
-              productInEdit!.amount === 0 ? "" : productInEdit!.amount
-            }
-          ></input>
-        </label>
+            {/* Mērvienība */}
+            <label>
+              <span>Mērvienība</span>
 
-        {/* Mērvienība */}
-        <label>
-          <span>Mērvienība</span>
+              <input ref={unitsField} defaultValue={productInEdit!.units}></input>
+            </label>
 
-          <input ref={unitsField} defaultValue={productInEdit!.units}></input>
-        </label>
-
-        <button onClick={handleSubmit}>Saglabāt</button>
-      </div>
-    </>
+            <button onClick={handleSubmit}>Saglabāt</button>
+          </div>
+        </>
+      )}
+    </ImageUpload>
   );
 
   const actionsBlock = (

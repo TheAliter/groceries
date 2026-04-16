@@ -1,9 +1,11 @@
+import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { useShoppingListStore } from "../../store/_store";
 import styles from "./styles/Header.module.css";
 
 interface Props {
   title: string;
+  trailing?: ReactNode;
   toggleSearch?: Function;
   handleMenuShow?: Function;
   showSearchIcon?: boolean;
@@ -14,6 +16,7 @@ interface Props {
 
 export default function Header({
   title,
+  trailing,
   toggleSearch = () => {},
   handleMenuShow = () => {},
   showSearchIcon = false,
@@ -36,40 +39,43 @@ export default function Header({
     <header className={styles.container}>
       <h1>{title}</h1>
 
-      <div className={styles["menu-icons"]}>
-        {showSearchIcon && (
-          <div
-            onClick={() => toggleSearch()}
-            className={styles["menu-icon"]}>
-
-            <span className="material-icons">search</span>
-          </div>
-        )}
-
+      <div className={styles["header-right"]}>
+        {trailing}
+        <div className={styles["menu-icons"]}>
         {showProductsIcon && (
           <div
             onClick={() => handleNavigateToProducts()}
-            className={styles["menu-icon"]}>
-
+            className={`${styles["menu-icon"]} ${styles["icon-primary"]}`}
+          >
             <span className="material-icons-outlined">shopping_basket</span>
+          </div>
+        )}
+
+        {showSearchIcon && (
+          <div
+            onClick={() => toggleSearch()}
+            className={`${styles["menu-icon"]} ${styles["icon-secondary"]}`}
+          >
+            <span className="material-icons">search</span>
           </div>
         )}
         {showSamplesIcon && (
           <div
             onClick={() => handleNavigateToSamples()}
-            className={styles["menu-icon"]}>
-
+            className={`${styles["menu-icon"]} ${styles["icon-primary"]}`}
+          >
             <span className="material-icons">merge</span>
           </div>
         )}
         {showMenuIcon && (
-          <div 
-            onClick={() => handleMenuShow()} 
-            className={styles["menu-icon"]}>
-
+          <div
+            onClick={() => handleMenuShow()}
+            className={`${styles["menu-icon"]} ${styles["icon-secondary"]}`}
+          >
             <span className="material-icons">menu</span>
           </div>
         )}
+        </div>
       </div>
     </header>
   );

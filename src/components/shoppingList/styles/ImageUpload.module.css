@@ -1,35 +1,121 @@
 .container {
   display: flex;
+  width: 100%;
 }
 
-.mainbutton {
-  background-color: var(--accent-color);
+.headerAddImageButton {
+  width: 2.125rem;
+  height: 2.125rem;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid var(--primary-color);
+  background-color: #fffaf7;
+  color: var(--primary-color);
+  box-shadow: none;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.mainbutton:hover {
-  background-color: var(--accent-color-dark);
+.headerAddImageButton span {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.headerAddImageButton:hover {
+  background-color: rgba(122, 31, 53, 0.08);
+  box-shadow: 0 0 0 1px rgba(122, 31, 53, 0.12);
+}
+
+.headerAddImageButton:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.headerAddImageButtonDragging {
+  background-color: rgba(122, 31, 53, 0.12);
+  border-color: var(--primary-color-light);
 }
 
 .imagecontainer {
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 8px;
+  align-items: stretch;
 }
 
-.actionbutton {
-  font-size: 16px;
-  padding-block: 4px;
+.imagePreviewWrap {
+  position: relative;
+  width: 100%;
 }
 
-.imageactions {
+.imageFloatingActions {
+  position: absolute;
+  top: 0.625rem;
+  right: 0.625rem;
+  z-index: 2;
   display: flex;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.imageFloatingActions > * {
+  pointer-events: auto;
+}
+
+.floatingActionButton {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.94);
+  color: var(--primary-color);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.floatingActionButton span {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.floatingActionButton:hover {
+  background-color: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.floatingActionButton:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.floatingActionButton:active {
+  transform: scale(0.96);
+}
+
+.floatingActionButtonDanger {
+  color: var(--danger-color);
+}
+
+.floatingActionButtonDanger:focus-visible {
+  outline-color: var(--danger-color);
 }
 
 .image {
+  display: block;
   width: 100%;
+  box-sizing: border-box;
   object-fit: cover;
   max-height: 150px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 0.375rem;
 }

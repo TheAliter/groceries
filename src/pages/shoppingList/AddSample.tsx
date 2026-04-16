@@ -50,26 +50,29 @@ export function AddSample() {
   }
 
   const mainContentBlock = (
-    <>
-      <Header title="Pievienot sagatavi" />
-      <div className={styles.form}>
-        <span>Bilde</span>
-        <ImageUpload type="sample" />
-        <label>
-          <span>Nosaukums</span>
-          <input ref={nameField} required></input>
-        </label>
-        <label>
-          <span>Daudzums</span>
-          <input ref={amountField} type="number"></input>
-        </label>
-        <label>
-          <span>Mērvienība</span>
-          <input ref={unitsField}></input>
-        </label>
-        <button onClick={handleSubmit}>Apstiprināt</button>
-      </div>
-    </>
+    <ImageUpload type="sample">
+      {({ addImageHeaderControl, imageArea }) => (
+        <>
+          <Header title="Pievienot sagatavi" trailing={addImageHeaderControl} />
+          <div className={styles.form}>
+            {imageArea}
+            <label>
+              <span>Nosaukums</span>
+              <input ref={nameField} required></input>
+            </label>
+            <label>
+              <span>Daudzums</span>
+              <input ref={amountField} type="number"></input>
+            </label>
+            <label>
+              <span>Mērvienība</span>
+              <input ref={unitsField}></input>
+            </label>
+            <button onClick={handleSubmit}>Apstiprināt</button>
+          </div>
+        </>
+      )}
+    </ImageUpload>
   );
 
   const actionsBlock = (

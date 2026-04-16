@@ -1,8 +1,5 @@
 .menu-container,
 .code-container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--padding-l);
   margin: auto;
   padding: var(--padding-xl);
   max-width: 280px;
@@ -10,8 +7,28 @@
   background-color: white;
 }
 
-.menu-container button:last-child {
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.menu-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-l);
+}
+
+.menu-group + .menu-group {
   margin-top: var(--margin-xl);
+  border-top: 1px solid rgba(122, 31, 53, 0.18);
+  padding-top: var(--margin-xl);
+}
+
+.code-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-l);
 }
 
 .code-container p {
@@ -51,6 +68,17 @@
 .menu-container button,
 .actions button {
   cursor: pointer;
+}
+
+.outline-button {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
+
+.outline-button:hover {
+  background-color: rgba(122, 31, 53, 0.08);
+  color: var(--primary-color);
 }
 
 @media (min-width: 960px) {

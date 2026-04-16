@@ -68,42 +68,44 @@ export function EditSample() {
   }, []);
 
   const mainContentBlock = (
-    <>
-      <Header title="Rediģēt sagatavi" />
+    <ImageUpload type="sample" image={sampleImage}>
+      {({ addImageHeaderControl, imageArea }) => (
+        <>
+          <Header title="Rediģēt sagatavi" trailing={addImageHeaderControl} />
 
-      <div className={styles.form}>
-        <span>Bilde</span>
+          <div className={styles.form}>
+            {imageArea}
 
-        <ImageUpload type="sample" image={sampleImage} />
+            <label>
+              <span>Nosaukums</span>
+              <input
+                ref={nameField}
+                defaultValue={sampleInEdit?.name}
+                required
+              ></input>
+            </label>
 
-        <label>
-          <span>Nosaukums</span>
-          <input
-            ref={nameField}
-            defaultValue={sampleInEdit?.name}
-            required
-          ></input>
-        </label>
+            <label>
+              <span>Daudzums</span>
+              <input
+                ref={amountField}
+                type="number"
+                defaultValue={
+                  sampleInEdit!.amount === 0 ? "" : sampleInEdit!.amount
+                }
+              ></input>
+            </label>
 
-        <label>
-          <span>Daudzums</span>
-          <input
-            ref={amountField}
-            type="number"
-            defaultValue={
-              sampleInEdit!.amount === 0 ? "" : sampleInEdit!.amount
-            }
-          ></input>
-        </label>
+            <label>
+              <span>Mērvienība</span>
+              <input ref={unitsField} defaultValue={sampleInEdit?.units}></input>
+            </label>
 
-        <label>
-          <span>Mērvienība</span>
-          <input ref={unitsField} defaultValue={sampleInEdit?.units}></input>
-        </label>
-
-        <button onClick={handleSubmit}>Saglabāt</button>
-      </div>
-    </>
+            <button onClick={handleSubmit}>Saglabāt</button>
+          </div>
+        </>
+      )}
+    </ImageUpload>
   );
 
   const actionsBlock = (
