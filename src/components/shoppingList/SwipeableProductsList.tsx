@@ -57,17 +57,23 @@ export default function SwipableProductsList() {
                   }}
                   className={styles.product}
                 >
+                  {product.imageName ? (
+                    <span
+                      className={styles.imageBookmark}
+                      role="img"
+                      aria-label="Precei ir attēls"
+                    />
+                  ) : null}
                   <span>{product.name} </span>
                   <span className={styles.dots}></span>
                   <span>
                     {product.amount > 0 && product.amount}{" "}
                     {product.units !== "" && product.units}
                   </span>
-                  <div className={styles["image-indicator"]}>
-                    {product.imageName && (
-                      <span className="material-icons">circle</span>
-                    )}
-                  </div>
+                  <div
+                    className={styles["image-indicator"]}
+                    aria-hidden="true"
+                  />
                 </li>
               </SwipeableListItem>
             ))}
