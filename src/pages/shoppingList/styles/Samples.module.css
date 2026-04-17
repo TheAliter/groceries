@@ -75,6 +75,7 @@
 }
 
 .sample {
+  position: relative;
   display: flex;
   align-items: center;
   margin-bottom: var(--margin-s);
@@ -83,13 +84,47 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-color: white;
   text-align: start;
-
   cursor: pointer;
+  overflow: hidden;
 }
 
-.sample .checkmark {
-  width: 32px;
-  color: var(--primary-color);
+.sampleOnShoppingList {
+  background-color: rgba(122, 31, 53, 0.06);
+  border-color: rgba(122, 31, 53, 0.18);
+}
+
+.imageBookmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 1.05rem 1.05rem 0 0;
+  border-color: var(--accent-color) transparent transparent transparent;
+  pointer-events: none;
+}
+
+.onListCheckWrap {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-right: var(--margin-xs);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(122, 31, 53, 0.1);
+}
+
+.onListCheckSvg {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  fill: var(--primary-color);
 }
 
 .sample .dots {

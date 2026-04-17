@@ -25,6 +25,20 @@ import { Header, SampleMenu } from "../../components/_components";
 import { ShoppingListLayout } from "../../layouts/_layouts";
 import { useShowCheckmark } from "../../hooks/samples/useShowCheckmark";
 
+function OnListCheckIndicator() {
+  return (
+    <span className={styles.onListCheckWrap} aria-hidden="true">
+      <svg
+        className={styles.onListCheckSvg}
+        viewBox="0 0 24 24"
+        focusable="false"
+      >
+        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+      </svg>
+    </span>
+  );
+}
+
 export function Samples() {
   const navigate = useNavigate();
   const screenType = useScreenSizeType();
@@ -177,16 +191,27 @@ export function Samples() {
             ) : (
               filteredSamples
                 .sort((a, b) => a.rank - b.rank)
-                .map((sample) => (
+                .map((sample) => {
+                  const isOnShoppingList = showCheckmark(sample);
+                  return (
                     <li
+                        key={sample.uid}
                         onClick={() => handleSampleClick(sample)}
-                        className={styles.sample}>
+                        className={`${styles.sample}${
+                          isOnShoppingList
+                            ? ` ${styles.sampleOnShoppingList}`
+                            : ""
+                        }`}
+                    >
+                        {sample.imageName ? (
+                          <span
+                            className={styles.imageBookmark}
+                            role="img"
+                            aria-label="Sagatavai ir attēls"
+                          />
+                        ) : null}
 
-                        {showCheckmark(sample) && (
-                            <span className={`${styles.checkmark} material-icons`}>
-                                checkmark
-                            </span>
-                        )}
+                        {isOnShoppingList ? <OnListCheckIndicator /> : null}
 
                         <span>{sample.name} </span>
 
@@ -199,7 +224,9 @@ export function Samples() {
                         
                         <SampleMenu uid={sample.uid}></SampleMenu>
                     </li>
-                )))}
+                  );
+                })
+            )}
           </ul>)
       : (<DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="0">
@@ -222,21 +249,29 @@ export function Samples() {
                       draggableId={sample.uid.toString()}
                       index={index}
                     >
-                      {(provided) => (
+                      {(provided) => {
+                        const isOnShoppingList = showCheckmark(sample);
+                        return (
                         <li
                           onClick={() => handleSampleClick(sample)}
                           ref={provided.innerRef}
-                          className={styles.sample}
+                          className={`${styles.sample}${
+                            isOnShoppingList
+                              ? ` ${styles.sampleOnShoppingList}`
+                              : ""
+                          }`}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                         >
-                          {showCheckmark(sample) && (
+                          {sample.imageName ? (
                             <span
-                              className={`${styles.checkmark} material-icons`}
-                            >
-                              checkmark
-                            </span>
-                          )}
+                              className={styles.imageBookmark}
+                              role="img"
+                              aria-label="Sagatavai ir attēls"
+                            />
+                          ) : null}
+
+                          {isOnShoppingList ? <OnListCheckIndicator /> : null}
                           <span>{sample.name} </span>
                           <span className={styles.dots}></span>
                           <span>
@@ -245,7 +280,8 @@ export function Samples() {
                           </span>
                           <SampleMenu uid={sample.uid}></SampleMenu>
                         </li>
-                      )}
+                        );
+                      }}
                     </Draggable>
                   ))
               )}

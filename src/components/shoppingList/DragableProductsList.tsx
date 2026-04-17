@@ -11,7 +11,13 @@ import { Product } from "../../types/_types";
 import { ProductMenu } from "../_components";
 import styles from "./styles/DragableProductsList.module.css";
 
-export default function DragableProductsList() {
+interface DragableProductsListProps {
+  onRequestDeleteProduct: (product: Product) => void;
+}
+
+export default function DragableProductsList({
+  onRequestDeleteProduct,
+}: DragableProductsListProps) {
   const productsStore = useProductsStore();
   const shoppingListStore = useShoppingListStore();
   const navigate = useNavigate();
@@ -85,7 +91,17 @@ export default function DragableProductsList() {
                           {product.amount > 0 && product.amount}{" "}
                           {product.units !== "" && product.units}
                         </span>
-                        <ProductMenu uid={product.uid}></ProductMenu>
+                        <ProductMenu
+                          uid={product.uid}
+                          onDeleteProduct={(productUid) => {
+                            const productToDelete = productsStore.products.find(
+                              (item) => item.uid === productUid
+                            );
+                            if (productToDelete) {
+                              onRequestDeleteProduct(productToDelete);
+                            }
+                          }}
+                        />
                       </li>
                     )}
                   </Draggable>
