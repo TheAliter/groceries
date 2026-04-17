@@ -2,19 +2,19 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { useOverlayVisible } from "../../hooks/_hooks";
-import { useSampleStore, useShoppingListStore } from "../../store/_store";
+import { useShoppingListStore } from "../../store/_store";
 import styles from "./styles/SampleMenu.module.css";
 
 interface Props {
   uid: number;
+  onRequestDeleteSample: (uid: number) => void;
 }
 
-export default function SampleMenu({ uid }: Props) {
+export default function SampleMenu({ uid, onRequestDeleteSample }: Props) {
   const menuReference = useRef<HTMLUListElement>(null);
   const { ref, isOverlayVisible, setIsOverlayVisible } =
     useOverlayVisible<HTMLDivElement>(false, menuReference);
   const navigate = useNavigate();
-  const samplesStore = useSampleStore();
   const shoppingListStore = useShoppingListStore();
   const [menuFixedPosition, setMenuFixedPosition] = useState<{
     top: number;
@@ -68,7 +68,7 @@ export default function SampleMenu({ uid }: Props) {
   function handleDelete(e: React.SyntheticEvent) {
     e.stopPropagation();
     setIsOverlayVisible(false);
-    samplesStore.deleteSample(uid, { updateDB: true });
+    onRequestDeleteSample(uid);
   }
 
   const menuPortal =

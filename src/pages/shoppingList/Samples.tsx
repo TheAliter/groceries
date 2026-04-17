@@ -52,6 +52,12 @@ export function Samples() {
     Math.floor(Math.random() * 1000000)
   );
 
+  const [showDeleteSampleSnackbar, setShowDeleteSampleSnackbar] =
+    useState(false);
+  const [deleteSampleSnackbarKey, setDeleteSampleSnackbarKey] = useState(0);
+  const [deletedSampleSnapshot, setDeletedSampleSnapshot] =
+    useState<Sample | null>(null);
+
   const [filteredSamples, setFilteredSamples] = useState<Sample[]>([]);
   const productsStore = useProductsStore();
   const samplesStore = useSampleStore();
@@ -143,6 +149,40 @@ export function Samples() {
   ) {
     setLastAddedProductUid(null);
     setShowSnackBar(false);
+  }
+
+  function handleRequestDeleteSample(sampleUid: number) {
+    const sampleToDelete = samplesStore.samples.find(
+      (sample) => sample.uid === sampleUid
+    );
+    if (!sampleToDelete) {
+      return;
+    }
+    const snapshot = Sample.fromMap(sampleToDelete.toMap());
+    setDeletedSampleSnapshot(snapshot);
+    setDeleteSampleSnackbarKey((key) => key + 1);
+    samplesStore.deleteSample(sampleUid, { updateDB: true });
+    setShowDeleteSampleSnackbar(true);
+  }
+
+  function handleUndoDeleteSample() {
+    if (!deletedSampleSnapshot) {
+      return;
+    }
+    samplesStore.addSample(deletedSampleSnapshot, {
+      updateDB: true,
+      updateImage: false,
+    });
+    setDeletedSampleSnapshot(null);
+    setShowDeleteSampleSnackbar(false);
+  }
+
+  function handleDeleteSampleSnackbarClose(
+    _event: React.SyntheticEvent | Event,
+    _reason?: SnackbarCloseReason
+  ) {
+    setShowDeleteSampleSnackbar(false);
+    setDeletedSampleSnapshot(null);
   }
 
   function toggleSearch() {
@@ -243,7 +283,10 @@ export function Samples() {
                             {sample.units !== "" && sample.units}
                         </span>
                         
-                        <SampleMenu uid={sample.uid}></SampleMenu>
+                        <SampleMenu
+                          uid={sample.uid}
+                          onRequestDeleteSample={handleRequestDeleteSample}
+                        ></SampleMenu>
                     </li>
                   );
                 })
@@ -299,7 +342,10 @@ export function Samples() {
                             {sample.amount > 0 && sample.amount}{" "}
                             {sample.units !== "" && sample.units}
                           </span>
-                          <SampleMenu uid={sample.uid}></SampleMenu>
+                          <SampleMenu
+                            uid={sample.uid}
+                            onRequestDeleteSample={handleRequestDeleteSample}
+                          ></SampleMenu>
                         </li>
                         );
                       }}
@@ -374,6 +420,40 @@ export function Samples() {
             Šāda prece jau ir iepirkuma sarakstā
           </Alert>
         )}
+      </Snackbar>
+      <Snackbar
+        key={deleteSampleSnackbarKey}
+        open={showDeleteSampleSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        autoHideDuration={2000}
+        onClose={handleDeleteSampleSnackbarClose}
+      >
+        <Alert
+          className={styles.deleteSnackbarDanger}
+          severity="error"
+          icon={
+            <span
+              className={`material-icons ${styles.deleteSnackbarAlertIcon}`}
+              aria-hidden="true"
+            >
+              priority_high
+            </span>
+          }
+          action={
+            <Button
+              className={styles.snackbarActionButton}
+              size="small"
+              variant="outlined"
+              color="inherit"
+              disableElevation
+              onClick={handleUndoDeleteSample}
+            >
+              Atcelt
+            </Button>
+          }
+        >
+          Sagatave izdzēsta
+        </Alert>
       </Snackbar>
     </>
   );
