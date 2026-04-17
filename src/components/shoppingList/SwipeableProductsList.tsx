@@ -7,12 +7,17 @@ import {
 } from "react-swipeable-list";
 import { useProductsStore, useShoppingListStore } from "../../store/_store";
 import { Product } from "../../types/_types";
-import { ProductMenu } from "../_components";
 import styles from "./styles/SwipableProductsList.module.css";
 import "react-swipeable-list/dist/styles.css";
 import { useState } from "react";
 
-export default function SwipableProductsList() {
+interface SwipableProductsListProps {
+  onRequestDeleteProduct: (product: Product) => void;
+}
+
+export default function SwipableProductsList({
+  onRequestDeleteProduct,
+}: SwipableProductsListProps) {
   const [mouseDownX, setMouseDownX] = useState(0);
   const productsStore = useProductsStore();
   const shoppingListStore = useShoppingListStore();
@@ -22,9 +27,7 @@ export default function SwipableProductsList() {
     <LeadingActions>
       <SwipeAction
         destructive={true}
-        onClick={() =>
-          productsStore.deleteProduct(product.uid, { updateDB: true })
-        }
+        onClick={() => onRequestDeleteProduct(product)}
       >
         IZDZĒST
       </SwipeAction>
@@ -57,17 +60,23 @@ export default function SwipableProductsList() {
                   }}
                   className={styles.product}
                 >
+                  {product.imageName ? (
+                    <span
+                      className={styles.imageBookmark}
+                      role="img"
+                      aria-label="Precei ir attēls"
+                    />
+                  ) : null}
                   <span>{product.name} </span>
                   <span className={styles.dots}></span>
                   <span>
                     {product.amount > 0 && product.amount}{" "}
                     {product.units !== "" && product.units}
                   </span>
-                  <div className={styles["image-indicator"]}>
-                    {product.imageName && (
-                      <span className="material-icons">circle</span>
-                    )}
-                  </div>
+                  <div
+                    className={styles["image-indicator"]}
+                    aria-hidden="true"
+                  />
                 </li>
               </SwipeableListItem>
             ))}

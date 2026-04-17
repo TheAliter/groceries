@@ -64,7 +64,7 @@ export default function Header({
             onClick={() => handleNavigateToSamples()}
             className={`${styles["menu-icon"]} ${styles["icon-primary"]}`}
           >
-            <span className="material-icons">merge</span>
+            <span className="material-icons-outlined">inventory_2</span>
           </div>
         )}
         {showMenuIcon && (

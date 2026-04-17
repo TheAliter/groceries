@@ -109,20 +109,23 @@ export function EditProduct() {
               <input ref={unitsField} defaultValue={productInEdit!.units}></input>
             </label>
 
-            <button onClick={handleSubmit}>Saglabāt</button>
+            <div className={styles.formActions}>
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                className={styles.cancelButton}
+              >
+                Atcelt
+              </button>
+              <button type="button" onClick={handleSubmit}>
+                Saglabāt
+              </button>
+            </div>
           </div>
         </>
       )}
     </ImageUpload>
   );
 
-  const actionsBlock = (
-    <button onClick={() => navigate(-1)} className={styles["action-button"]}>
-      Atcelt
-    </button>
-  );
-
-  return (
-    <ShoppingListLayout mainContent={mainContentBlock} actions={actionsBlock} />
-  );
+  return <ShoppingListLayout mainContent={mainContentBlock} />;
 }

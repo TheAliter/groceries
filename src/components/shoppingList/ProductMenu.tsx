@@ -5,9 +5,10 @@ import styles from "./styles/ProductMenu.module.css";
 
 interface Props {
   uid: number;
+  onDeleteProduct?: (uid: number) => void;
 }
 
-export default function ProductMenu({ uid }: Props) {
+export default function ProductMenu({ uid, onDeleteProduct }: Props) {
   const { ref, isOverlayVisible, setIsOverlayVisible } =
     useOverlayVisible<HTMLDivElement>(false);
   const navigate = useNavigate();
@@ -21,7 +22,12 @@ export default function ProductMenu({ uid }: Props) {
 
   function handleDelete(e: React.SyntheticEvent) {
     e.stopPropagation();
-    productsStore.deleteProduct(uid, {updateDB: true});
+    setIsOverlayVisible(false);
+    if (onDeleteProduct) {
+      onDeleteProduct(uid);
+    } else {
+      productsStore.deleteProduct(uid, { updateDB: true });
+    }
   }
 
   function handleEdit(e: React.SyntheticEvent) {

@@ -8,7 +8,7 @@ import {
 } from "react-beautiful-dnd";
 import Snackbar from "@mui/material/Snackbar";
 import React, { ChangeEvent, ChangeEventHandler, useEffect, useRef, useState } from "react";
-import { Alert } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import { SnackbarCloseReason } from "@mui/base";
 import {
   useProductsStore,
@@ -25,12 +25,29 @@ import { Header, SampleMenu } from "../../components/_components";
 import { ShoppingListLayout } from "../../layouts/_layouts";
 import { useShowCheckmark } from "../../hooks/samples/useShowCheckmark";
 
+function OnListCheckIndicator() {
+  return (
+    <span className={styles.onListCheckWrap} aria-hidden="true">
+      <svg
+        className={styles.onListCheckSvg}
+        viewBox="0 0 24 24"
+        focusable="false"
+      >
+        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+      </svg>
+    </span>
+  );
+}
+
 export function Samples() {
   const navigate = useNavigate();
   const screenType = useScreenSizeType();
   const [showSearch, setShowSearch] = useState(false);
   const [showSnackBar, setShowSnackBar] = useState(false);
   const [isSuccessfulAdd, setIsSuccessfulAdd] = useState(true);
+  const [lastAddedProductUid, setLastAddedProductUid] = useState<number | null>(
+    null
+  );
   const [snackbarKey, setSnackbarKey] = useState(
     Math.floor(Math.random() * 1000000)
   );
@@ -87,9 +104,11 @@ export function Samples() {
 
     if (productsStore.products.some((product) => product.sameAs(sample))) {
       setIsSuccessfulAdd(false);
+      setLastAddedProductUid(null);
     } else {
       setIsSuccessfulAdd(true);
       const uid = shoppingListStore.generateNewProductUid();
+      setLastAddedProductUid(uid);
       const newProduct = Product.fromMap({ ...sample.toMap(), uid });
       productsStore.addProduct(newProduct, {
         updateDB: true,
@@ -103,10 +122,26 @@ export function Samples() {
     setShowSnackBar(true);
   }
 
+  function handleCancelSuccessfulAdd() {
+    if (lastAddedProductUid !== null) {
+      productsStore.deleteProduct(lastAddedProductUid, { updateDB: true });
+      const revertedLastProductUid = Math.max(
+        0,
+        shoppingListStore.lastProductUid - 1
+      );
+      shoppingListStore.setLastProductUid(revertedLastProductUid, {
+        updateDB: true,
+      });
+    }
+    setLastAddedProductUid(null);
+    setShowSnackBar(false);
+  }
+
   function handleSnackBarClose(
     e: React.SyntheticEvent | Event,
     reason?: SnackbarCloseReason
   ) {
+    setLastAddedProductUid(null);
     setShowSnackBar(false);
   }
 
@@ -177,16 +212,27 @@ export function Samples() {
             ) : (
               filteredSamples
                 .sort((a, b) => a.rank - b.rank)
-                .map((sample) => (
+                .map((sample) => {
+                  const isOnShoppingList = showCheckmark(sample);
+                  return (
                     <li
+                        key={sample.uid}
                         onClick={() => handleSampleClick(sample)}
-                        className={styles.sample}>
+                        className={`${styles.sample}${
+                          isOnShoppingList
+                            ? ` ${styles.sampleOnShoppingList}`
+                            : ""
+                        }`}
+                    >
+                        {sample.imageName ? (
+                          <span
+                            className={styles.imageBookmark}
+                            role="img"
+                            aria-label="Sagatavai ir attēls"
+                          />
+                        ) : null}
 
-                        {showCheckmark(sample) && (
-                            <span className={`${styles.checkmark} material-icons`}>
-                                checkmark
-                            </span>
-                        )}
+                        {isOnShoppingList ? <OnListCheckIndicator /> : null}
 
                         <span>{sample.name} </span>
 
@@ -199,7 +245,9 @@ export function Samples() {
                         
                         <SampleMenu uid={sample.uid}></SampleMenu>
                     </li>
-                )))}
+                  );
+                })
+            )}
           </ul>)
       : (<DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="0">
@@ -222,21 +270,29 @@ export function Samples() {
                       draggableId={sample.uid.toString()}
                       index={index}
                     >
-                      {(provided) => (
+                      {(provided) => {
+                        const isOnShoppingList = showCheckmark(sample);
+                        return (
                         <li
                           onClick={() => handleSampleClick(sample)}
                           ref={provided.innerRef}
-                          className={styles.sample}
+                          className={`${styles.sample}${
+                            isOnShoppingList
+                              ? ` ${styles.sampleOnShoppingList}`
+                              : ""
+                          }`}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                         >
-                          {showCheckmark(sample) && (
+                          {sample.imageName ? (
                             <span
-                              className={`${styles.checkmark} material-icons`}
-                            >
-                              checkmark
-                            </span>
-                          )}
+                              className={styles.imageBookmark}
+                              role="img"
+                              aria-label="Sagatavai ir attēls"
+                            />
+                          ) : null}
+
+                          {isOnShoppingList ? <OnListCheckIndicator /> : null}
                           <span>{sample.name} </span>
                           <span className={styles.dots}></span>
                           <span>
@@ -245,7 +301,8 @@ export function Samples() {
                           </span>
                           <SampleMenu uid={sample.uid}></SampleMenu>
                         </li>
-                      )}
+                        );
+                      }}
                     </Draggable>
                   ))
               )}
@@ -290,11 +347,30 @@ export function Samples() {
         onClose={handleSnackBarClose}
       >
         {isSuccessfulAdd ? (
-          <Alert severity="success" onClose={handleSnackBarClose}>
+          <Alert
+            className={styles.snackbarAlert}
+            severity="success"
+            action={
+              <Button
+                className={styles.snackbarDismissOnSuccess}
+                size="small"
+                variant="outlined"
+                color="inherit"
+                disableElevation
+                onClick={handleCancelSuccessfulAdd}
+              >
+                Atcelt
+              </Button>
+            }
+          >
             Prece pievienota iepirkuma sarakstam
           </Alert>
         ) : (
-          <Alert severity="error" onClose={handleSnackBarClose}>
+          <Alert
+            className={styles.snackbarAlert}
+            severity="error"
+            onClose={handleSnackBarClose}
+          >
             Šāda prece jau ir iepirkuma sarakstā
           </Alert>
         )}

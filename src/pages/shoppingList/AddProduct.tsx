@@ -69,20 +69,23 @@ export function AddProduct() {
               <span>Mērvienība</span>
               <input ref={unitsField}></input>
             </label>
-            <button onClick={handleSubmit}>Apstiprināt</button>
+            <div className={styles.formActions}>
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                className={styles.cancelButton}
+              >
+                Atcelt
+              </button>
+              <button type="button" onClick={handleSubmit}>
+                Apstiprināt
+              </button>
+            </div>
           </div>
         </>
       )}
     </ImageUpload>
   );
 
-  const actionsBlock = (
-    <button onClick={() => navigate(-1)} className={styles["action-button"]}>
-      Atcelt
-    </button>
-  );
-
-  return (
-    <ShoppingListLayout mainContent={mainContentBlock} actions={actionsBlock} />
-  );
+  return <ShoppingListLayout mainContent={mainContentBlock} />;
 }
