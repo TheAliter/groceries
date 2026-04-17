@@ -8,7 +8,7 @@ import {
 } from "react-beautiful-dnd";
 import Snackbar from "@mui/material/Snackbar";
 import React, { ChangeEvent, ChangeEventHandler, useEffect, useRef, useState } from "react";
-import { Alert } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import { SnackbarCloseReason } from "@mui/base";
 import {
   useProductsStore,
@@ -45,6 +45,9 @@ export function Samples() {
   const [showSearch, setShowSearch] = useState(false);
   const [showSnackBar, setShowSnackBar] = useState(false);
   const [isSuccessfulAdd, setIsSuccessfulAdd] = useState(true);
+  const [lastAddedProductUid, setLastAddedProductUid] = useState<number | null>(
+    null
+  );
   const [snackbarKey, setSnackbarKey] = useState(
     Math.floor(Math.random() * 1000000)
   );
@@ -101,9 +104,11 @@ export function Samples() {
 
     if (productsStore.products.some((product) => product.sameAs(sample))) {
       setIsSuccessfulAdd(false);
+      setLastAddedProductUid(null);
     } else {
       setIsSuccessfulAdd(true);
       const uid = shoppingListStore.generateNewProductUid();
+      setLastAddedProductUid(uid);
       const newProduct = Product.fromMap({ ...sample.toMap(), uid });
       productsStore.addProduct(newProduct, {
         updateDB: true,
@@ -117,10 +122,26 @@ export function Samples() {
     setShowSnackBar(true);
   }
 
+  function handleCancelSuccessfulAdd() {
+    if (lastAddedProductUid !== null) {
+      productsStore.deleteProduct(lastAddedProductUid, { updateDB: true });
+      const revertedLastProductUid = Math.max(
+        0,
+        shoppingListStore.lastProductUid - 1
+      );
+      shoppingListStore.setLastProductUid(revertedLastProductUid, {
+        updateDB: true,
+      });
+    }
+    setLastAddedProductUid(null);
+    setShowSnackBar(false);
+  }
+
   function handleSnackBarClose(
     e: React.SyntheticEvent | Event,
     reason?: SnackbarCloseReason
   ) {
+    setLastAddedProductUid(null);
     setShowSnackBar(false);
   }
 
@@ -326,11 +347,30 @@ export function Samples() {
         onClose={handleSnackBarClose}
       >
         {isSuccessfulAdd ? (
-          <Alert severity="success" onClose={handleSnackBarClose}>
+          <Alert
+            className={styles.snackbarAlert}
+            severity="success"
+            action={
+              <Button
+                className={styles.snackbarDismissOnSuccess}
+                size="small"
+                variant="outlined"
+                color="inherit"
+                disableElevation
+                onClick={handleCancelSuccessfulAdd}
+              >
+                Atcelt
+              </Button>
+            }
+          >
             Prece pievienota iepirkuma sarakstam
           </Alert>
         ) : (
-          <Alert severity="error" onClose={handleSnackBarClose}>
+          <Alert
+            className={styles.snackbarAlert}
+            severity="error"
+            onClose={handleSnackBarClose}
+          >
             Šāda prece jau ir iepirkuma sarakstā
           </Alert>
         )}
