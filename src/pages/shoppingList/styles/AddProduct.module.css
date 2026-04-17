@@ -18,13 +18,22 @@
   text-align: left;
 }
 
-.action-button {
+.formActions {
+  display: flex;
+  flex-direction: row;
+  gap: var(--padding-m);
   width: 100%;
-  max-width: 450px;
+}
+
+.formActions button {
+  flex: 1;
+}
+
+.cancelButton {
   background-color: var(--accent-color);
 }
 
-.action-button:hover {
+.cancelButton:hover {
   background-color: var(--accent-color-dark);
 }
 
@@ -33,11 +42,7 @@
     gap: var(--padding-l);
   }
 
-  .form button {
+  .formActions {
     margin-top: var(--margin-m);
-  }
-
-  .action-button {
-    max-width: 300px;
   }
 }

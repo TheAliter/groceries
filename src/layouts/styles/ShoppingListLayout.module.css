@@ -40,6 +40,10 @@
     column-gap: var(--margin-xl2);
   }
 
+  .shopping-list-base-single {
+    grid-template-columns: 1fr;
+  }
+
   .left {
     height: auto;
   }
